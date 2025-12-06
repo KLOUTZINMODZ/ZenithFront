@@ -42,7 +42,7 @@ const lazyWithRetry = <T extends React.ComponentType<any>>(factory: () => Promis
 };
 
 const MarketplacePage = lazyWithRetry(() => import('./pages/MarketplacePage'));
-const MarketplaceItemPage = lazyWithRetry(() => import('./pages/MarketplaceItemPage'));
+const MarketplaceItemPage = lazyWithRetry(() => import('./pages/MarketplaceItemPageWrapper'));
 const ForgotPasswordModalPage = lazyWithRetry(() => import('./pages/ForgotPasswordModalPage'));
 const AuthModalExamplePage = lazyWithRetry(() => import('./pages/AuthModalExamplePage'));
 const AccountPage = lazyWithRetry(() => import('./pages/AccountPage'));
