@@ -699,20 +699,10 @@ const MarketplaceItemPage: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-10"
+      className="flex flex-col"
     >
       {}
-      <div className="mb-6">
-        <button 
-          onClick={() => navigate('/marketplace')} 
-          className="flex items-center text-gray-400 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Voltar para o Marketplace
-        </button>
-      </div>
-      
-      <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-first lg:col-span-8 lg:order-none">
+      <div className="bg-gray-800 relative overflow-hidden border-b border-gray-700 lg:rounded-xl lg:overflow-hidden lg:border lg:border-gray-700 lg:m-0">
         <AnimatePresence mode="wait">
           {selectedImage && !imageLoadError ? (
             <motion.img
@@ -741,7 +731,7 @@ const MarketplaceItemPage: React.FC = () => {
       
       {}
       {galleryImages.length > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-2 py-3 lg:py-0 lg:mt-4 px-3 sm:px-4 md:px-6 lg:px-0">
           {galleryImages.map((_, index) => (
             <button
               key={index}
@@ -756,6 +746,18 @@ const MarketplaceItemPage: React.FC = () => {
           ))}
         </div>
       )}
+      
+      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
+        {}
+        <div className="mb-6">
+          <button 
+            onClick={() => navigate('/marketplace')} 
+            className="flex items-center text-gray-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar para o Marketplace
+          </button>
+        </div>
       
       <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
         {}
@@ -1211,10 +1213,12 @@ const MarketplaceItemPage: React.FC = () => {
           </div>
         </div>
       </div>
+        </div>
+      </div>
       
       {}
       {relatedItems.length > 0 && (
-        <div className="mt-12 order-5 lg:order-none">
+        <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 mt-12 order-5 lg:order-none">
           <h2 className="text-2xl font-bold text-white mb-6">Itens Relacionados</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
             {relatedItems.map((relatedItem) => (
@@ -1270,6 +1274,7 @@ const MarketplaceItemPage: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
         </div>
       )}
     </motion.div>
