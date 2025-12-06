@@ -712,11 +712,9 @@ const MarketplaceItemPage: React.FC = () => {
         </button>
       </div>
       
-      <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
         {}
-        <div className="lg:col-span-8 space-y-4 sm:space-y-6">
-          {}
-          <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-1 lg:order-none">
+        <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-first lg:col-span-8 lg:order-none">
             <AnimatePresence mode="wait">
               {selectedImage && !imageLoadError ? (
                 <motion.img
@@ -760,9 +758,12 @@ const MarketplaceItemPage: React.FC = () => {
               ))}
             </div>
           )}
-          
+        </div>
+        
+        {}
+        <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-2 lg:order-1">
           {}
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6">
+          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Descrição</h3>
             <div className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap break-words leading-relaxed max-w-full overflow-hidden">
               {item.description}
@@ -771,7 +772,7 @@ const MarketplaceItemPage: React.FC = () => {
           
           {}
           {item.deliveryInstructions && (
-            <div className="bg-gray-800 rounded-xl p-6">
+            <div className="bg-gray-800 rounded-xl p-6 order-3 lg:order-none">
               <h3 className="text-xl font-bold text-white mb-4">Instruções de Entrega</h3>
               <div className="p-4 bg-gray-700/50 rounded-lg text-gray-300 whitespace-pre-wrap break-words leading-relaxed max-w-full overflow-hidden">
                 {item.deliveryInstructions}
@@ -781,7 +782,7 @@ const MarketplaceItemPage: React.FC = () => {
 
           {}
           {hasAdditionalInfo && (
-            <div className="bg-gray-800 rounded-xl p-4 sm:p-6 space-y-4">
+            <div className="bg-gray-800 rounded-xl p-4 sm:p-6 space-y-4 order-3 lg:order-none">
               <h3 className="text-lg sm:text-xl font-bold text-white">Informações do Serviço</h3>
 
               {detailRows.length > 0 && (
@@ -828,7 +829,7 @@ const MarketplaceItemPage: React.FC = () => {
           )}
           
           {}
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6">
+          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <div className="relative">
@@ -1006,9 +1007,9 @@ const MarketplaceItemPage: React.FC = () => {
         </div>
         
         {}
-        <div className="lg:col-span-4 space-y-4 sm:space-y-6 lg:sticky lg:top-6 self-start">
+        <div className="lg:col-span-4 space-y-4 sm:space-y-6 lg:sticky lg:top-6 self-start order-1 lg:order-2">
           {}
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6">
+          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-2 lg:order-none">
             <div className="flex items-center justify-between mb-3 gap-2">
               <span className="px-2 sm:px-3 py-1 bg-purple-600/20 text-purple-400 text-xs sm:text-sm rounded-full flex-shrink-0">
                 {item.category}
@@ -1202,7 +1203,7 @@ const MarketplaceItemPage: React.FC = () => {
           </div>
           
           {}
-          <div className="bg-gray-800 rounded-xl p-6">
+          <div className="bg-gray-800 rounded-xl p-6 order-4 lg:order-none">
             <div className="text-gray-400 text-sm">
               Publicado em {formatDate(item.createdAt)}
               {item.updatedAt !== item.createdAt && (
@@ -1215,7 +1216,7 @@ const MarketplaceItemPage: React.FC = () => {
       
       {}
       {relatedItems.length > 0 && (
-        <div className="mt-12">
+        <div className="mt-12 order-5 lg:order-none">
           <h2 className="text-2xl font-bold text-white mb-6">Itens Relacionados</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
             {relatedItems.map((relatedItem) => (
