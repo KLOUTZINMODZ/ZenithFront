@@ -1213,7 +1213,6 @@ const MarketplaceItemPage: React.FC = () => {
           </div>
         </div>
       </div>
-        </div>
       </div>
       
       {}
@@ -1274,7 +1273,6 @@ const MarketplaceItemPage: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
         </div>
       )}
     </motion.div>
