@@ -712,54 +712,52 @@ const MarketplaceItemPage: React.FC = () => {
         </button>
       </div>
       
-      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-        {}
-        <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-first lg:col-span-8 lg:order-none">
-            <AnimatePresence mode="wait">
-              {selectedImage && !imageLoadError ? (
-                <motion.img
-                  key={selectedImage}
-                  src={selectedImage}
-                  alt={item.title}
-                  className="w-full h-[60vw] max-h-[50vh] sm:h-[50vw] sm:max-h-[60vh] md:h-[420px] lg:h-[520px] object-cover bg-gray-900"
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 26, mass: 0.6 }}
-                  onError={() => setImageLoadError(true)}
-                />
-              ) : (
-                <div className="w-full h-[60vw] max-h-[50vh] sm:h-[50vw] sm:max-h-[60vh] md:h-[420px] lg:h-[520px] bg-gradient-to-br from-gray-700 to-gray-800">
-                  <ImagePlaceholder className="w-full h-full" />
-                </div>
-              )}
-            </AnimatePresence>
-            {soldOut && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <span className="bg-red-600 text-white px-3 py-1 rounded text-sm font-semibold shadow">Produto já vendido</span>
-              </div>
-            )}
-          </div>
-          
-          {}
-          {galleryImages.length > 1 && (
-            <div className="flex justify-center gap-2">
-              {galleryImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentImageIndex(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    currentImageIndex === index
-                      ? 'bg-white w-8'
-                      : 'bg-white/50 hover:bg-white/75 w-2'
-                  }`}
-                  aria-label={`Ir para imagem ${index + 1}`}
-                />
-              ))}
+      <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-first lg:col-span-8 lg:order-none">
+        <AnimatePresence mode="wait">
+          {selectedImage && !imageLoadError ? (
+            <motion.img
+              key={selectedImage}
+              src={selectedImage}
+              alt={item.title}
+              className="w-full h-[60vw] max-h-[50vh] sm:h-[50vw] sm:max-h-[60vh] md:h-[420px] lg:h-[520px] object-cover bg-gray-900"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 26, mass: 0.6 }}
+              onError={() => setImageLoadError(true)}
+            />
+          ) : (
+            <div className="w-full h-[60vw] max-h-[50vh] sm:h-[50vw] sm:max-h-[60vh] md:h-[420px] lg:h-[520px] bg-gradient-to-br from-gray-700 to-gray-800">
+              <ImagePlaceholder className="w-full h-full" />
             </div>
           )}
+        </AnimatePresence>
+        {soldOut && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <span className="bg-red-600 text-white px-3 py-1 rounded text-sm font-semibold shadow">Produto já vendido</span>
+          </div>
+        )}
+      </div>
+      
+      {}
+      {galleryImages.length > 1 && (
+        <div className="flex justify-center gap-2">
+          {galleryImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                currentImageIndex === index
+                  ? 'bg-white w-8'
+                  : 'bg-white/50 hover:bg-white/75 w-2'
+              }`}
+              aria-label={`Ir para imagem ${index + 1}`}
+            />
+          ))}
         </div>
-        
+      )}
+      
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
         {}
         <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-2 lg:order-1">
           {}
