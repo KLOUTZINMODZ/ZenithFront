@@ -702,6 +702,16 @@ const MarketplaceItemPage: React.FC = () => {
       className="flex flex-col"
     >
       {}
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 pb-3">
+        <button
+          onClick={() => navigate('/marketplace')}
+          className="flex items-center text-gray-400 hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar para o Marketplace
+        </button>
+      </div>
+
       <div className="bg-gray-800 relative overflow-hidden border-b border-gray-700 lg:rounded-xl lg:overflow-hidden lg:border lg:border-gray-700 lg:m-0">
         <AnimatePresence mode="wait">
           {selectedImage && !imageLoadError ? (
@@ -748,16 +758,6 @@ const MarketplaceItemPage: React.FC = () => {
       )}
       
       <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 space-y-6">
-        <div className="mb-2">
-          <button
-            onClick={() => navigate('/marketplace')}
-            className="flex items-center text-gray-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar para o Marketplace
-          </button>
-        </div>
-
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
           <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-2 lg:order-1">
             <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
