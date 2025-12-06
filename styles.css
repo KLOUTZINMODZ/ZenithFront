@@ -1,0 +1,27 @@
+.mx-auto div .md\:flex{
+    height:790px;
+   }
+   #root .min-h-screen .min-h-screen{
+    min-height:945px;
+    height:945px;
+   }
+   
+   .wallet-page .wallet-grid-scope.mx-auto > .grid {
+    margin-left: -30px;
+    margin-right: -30px;
+  }
+  
+  .wallet-page .lg\:col-span-8 .overflow-hidden {
+    min-height: 230px;
+  }
+  @media (max-width: 640px) {
+    .wallet-page .wallet-grid-scope.mx-auto > .grid {
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+  }
+
+/* History (/wallet/history) – set left chart card height */
+.history-page .grid .lg\:col-span-2 .overflow-hidden {
+  height: 652px;
+}

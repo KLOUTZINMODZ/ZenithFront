@@ -1,0 +1,1217 @@
+/* Responsive chat design with green border that respects existing layout */
+.chat-fullscreen-container {
+  position: relative;
+  width: 100%;
+  height: calc(100dvh - var(--header-h, 64px));
+  max-height: calc(100dvh - var(--header-h, 64px));
+  background: #111827;
+  border: 3px solid #1d283d;
+  border-radius: 15px;
+  overflow: hidden;
+  overflow-x: hidden !important;
+  z-index: 1;
+  min-height: 0;
+}
+
+/* When inside the main content container (which has vertical padding),
+   subtract that padding (p-4 => 2rem total, lg:p-6 => 3rem total) */
+.content-container .chat-fullscreen-container {
+  height: calc(100dvh - var(--header-h, 64px) - 2rem);
+  max-height: calc(100dvh - var(--header-h, 64px) - 2rem);
+}
+@media (min-width: 1024px) {
+  .content-container .chat-fullscreen-container {
+    height: calc(100dvh - var(--header-h, 72px) - 3rem);
+    max-height: calc(100dvh - var(--header-h, 72px) - 3rem);
+  }
+}
+
+.chat-content-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow-x: hidden !important;
+  overflow-y: visible;
+}
+
+.chat-sidebar {
+  width: 420px;
+  min-width: 420px;
+  max-width: 420px;
+  height: 100%;
+  min-height: 0;
+  border-right: 1px solid rgba(139, 92, 246, 0.15);
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.6) 0%, rgba(31, 41, 55, 0.5) 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-x: hidden !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Sidebar collapsed state */
+.chat-sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  border-right: none;
+  box-shadow: none;
+}
+
+/* Removed sidebar toggle button - moved to header */
+
+/* Fix for toggle button in header - remove any inherited height */
+.chat-header .md\:flex {
+  height: auto !important;
+}
+
+.chat-main-area {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden !important;
+  overflow-y: visible;
+  background: rgba(17, 24, 39, 0.4);
+}
+
+/* Desktop/Default: make messages fill available space and input dock at bottom */
+.chat-messages-container {
+  flex: 1;
+  min-height: 0;
+  padding: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: linear-gradient(180deg, #0f172a 0%, #111827 50%, #0f172a 100%);
+  position: relative;
+  scrollbar-gutter: auto;
+  overscroll-behavior: contain;
+  /* Ensure anchors and last items are not hidden under sticky CTA */
+  scroll-padding-top: 0.5rem;
+  scroll-padding-bottom: 6rem;
+  /* Prevent auto-scroll to bottom - keep scroll position stable */
+  overflow-anchor: none;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+}
+
+.chat-scroll-button-holder {
+  position: sticky;
+  bottom: -0.75rem;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.chat-scroll-button {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 640px) {
+  .chat-scroll-button-holder {
+    bottom: -0.5rem;
+  }
+
+  .chat-scroll-button {
+    padding: 0.65rem;
+  }
+}
+
+.chat-messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages-container::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.chat-messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+.chat-messages-container .proposal-modal-fixed {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: var(--layer-chat-sticky) !important;
+  margin: -1.5rem -1.5rem 1rem -1.5rem !important;
+  width: calc(100% + 3rem) !important;
+  margin-left: -1.5rem !important;
+  margin-right: -1.5rem !important;
+  background: rgba(17, 24, 39, 0.98);
+  backdrop-filter: blur(12px);
+  left: 0;
+  right: 0;
+}
+
+/* Marketplace order status - always visible at top */
+.marketplace-order-status-sticky {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  margin: -1.5rem -1.5rem 1rem -1.5rem !important;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.85) 0%, rgba(31, 41, 55, 0.8) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: calc(100% + 3rem) !important;
+  margin-left: -1.5rem !important;
+  margin-right: -1.5rem !important;
+}
+
+/* Sticky bottom CTA (e.g., Aceitar/Recusar) that sits right above the input */
+.chat-cta-sticky {
+  position: sticky;
+  /* Sit just above the container bottom padding so it aligns with input */
+  bottom: 1rem;
+  z-index: var(--layer-chat-sticky);
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(10px);
+}
+
+/* Anchor element used at the end of messages list so sticky CTA doesn't cover content */
+.scroll-anchor {
+  scroll-margin-bottom: 6rem;
+  /* Prevent this anchor from triggering auto-scroll */
+  pointer-events: none;
+  visibility: hidden;
+  height: 0;
+  min-height: 0;
+}
+
+.chat-input-area {
+  padding: 1.25rem 1.5rem;
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  border-top: 1px solid rgba(139, 92, 246, 0.1);
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.3) 0%, rgba(31, 41, 55, 0.4) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chat-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+  background: linear-gradient(180deg, rgba(31, 41, 55, 0.4) 0%, rgba(17, 24, 39, 0.3) 100%);
+  backdrop-filter: blur(16px) saturate(180%);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Utility: pull banner to touch chat edges exactly (matches container paddings) */
+.chat-banner-flush {
+  margin-left: -1rem;
+  margin-right: calc(-1rem - 1px);
+  margin-top: -1rem;
+}
+@media (max-width: 480px) {
+  .chat-banner-flush {
+    margin-left: -0.75rem;
+    margin-right: calc(-0.75rem - 1px);
+    margin-top: -0.75rem;
+  }
+}
+
+/* Modern message bubbles */
+.message-row { 
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.bubble-base {
+  padding: 0.875rem 1.125rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: saturate(140%) blur(8px);
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+.bubble-own {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  color: #fff;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25), 0 1px 4px rgba(139, 92, 246, 0.15);
+}
+
+.bubble-other {
+  background: linear-gradient(135deg, rgba(55, 65, 81, 0.9) 0%, rgba(45, 55, 72, 0.85) 100%);
+  color: #e5e7eb;
+  border: 1px solid rgba(75, 85, 99, 0.4);
+}
+
+.bubble-base:hover { 
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.bubble-own:hover {
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.35), 0 2px 8px rgba(139, 92, 246, 0.2);
+}
+
+.message-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .bubble-base { border-radius: 1rem; }
+}
+
+/* Input and buttons refresh */
+.chat-text-input {
+  background: rgba(31, 41, 55, 0.8);
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+  color: #e5e7eb;
+  border-radius: 1rem;
+  padding: 0.875rem 1.125rem;
+  font-size: 0.9375rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+.chat-text-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15), 0 4px 12px rgba(139, 92, 246, 0.2);
+  background: rgba(17, 24, 39, 0.9);
+  transform: translateY(-1px);
+}
+.chat-text-input::placeholder {
+  color: rgba(156, 163, 175, 0.6);
+}
+
+.btn-attach, .btn-send {
+  border-radius: 0.75rem;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn-attach:hover { transform: translateY(-1px); }
+
+.btn-send {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  color: #fff;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+}
+.btn-send:disabled {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  border-color: rgba(75, 85, 99, 0.4);
+  box-shadow: none;
+  opacity: 0.6;
+}
+.btn-send:not(:disabled):hover { 
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4), 0 4px 12px rgba(139, 92, 246, 0.25);
+  background: linear-gradient(135deg, #9333ea 0%, #8b5cf6 50%, #7c3aed 100%);
+}
+.btn-send:not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Minimal image bubble variant */
+.bubble-image {
+  padding: 0.25rem; /* tighter padding */
+  background: transparent;
+  border: 1px solid rgba(75, 85, 99, 0.35);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+.bubble-image-own { border-color: rgba(139, 92, 246, 0.35); }
+.bubble-image-other { border-color: rgba(75, 85, 99, 0.35); }
+
+/* Image card inside bubble: edge-to-edge with soft hover */
+.image-card {
+  display: block;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+.image-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s ease;
+}
+.image-card:hover img { transform: scale(1.01); }
+.sidebar-conversations-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
+}
+
+/* WhatsApp-like Mobile Design */
+@media (max-width: 768px) {
+  .chat-fullscreen-container {
+    border-width: 2px;
+    height: calc(100dvh - var(--header-h, 64px));
+    max-height: calc(100dvh - var(--header-h, 64px));
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* FIX: Garantir que container não corte conteúdo */
+  .chat-fullscreen-container * {
+    box-sizing: border-box !important;
+  }
+  
+  .chat-content-wrapper {
+    flex: 1;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* HomePage: Conversations List (WhatsApp-like) */
+  .chat-sidebar {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: #111827;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    min-height: 0;
+  }
+  
+  .chat-sidebar.mobile-hidden {
+    transform: translateX(-100%);
+  }
+  
+  /* Conversation Page: Individual Chat (WhatsApp-like) */
+  .chat-main-area {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    background: #111827;
+    z-index: 2;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+    /* Garantir que input não seja cortado */
+    padding-bottom: 0 !important;
+  }
+  
+  .chat-main-area.mobile-visible {
+    transform: translateX(0);
+  }
+ 
+  /* Chat Header - WhatsApp style */
+  .chat-header {
+    padding: 1rem;
+    flex-shrink: 0;
+    height: 70px;
+    max-height: 70px;
+    border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+    background: rgba(31, 41, 55, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  /* Messages Container - WhatsApp style */
+  .chat-messages-container {
+    /* keep base styles; additionally hide scrollbar on mobile */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 1rem !important;
+    padding-bottom: 1.5rem !important;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  /* FIX: Garantir que mensagens não sejam cortadas */
+  .chat-messages-container > div {
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Modal fixo no mobile também */
+  .chat-messages-container .proposal-modal-fixed {
+    /* Let it fill naturally without negative margins to prevent clipping */
+    left: 0;
+    right: 0;
+  }
+  
+  .chat-messages-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Input Area - WhatsApp style */
+  .chat-input-area {
+    flex-shrink: 0;
+    min-height: 80px;
+    max-height: 120px;
+    background: rgba(31, 41, 55, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1rem !important;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid rgba(139, 92, 246, 0.1);
+  }
+  
+  /* FIX: Garantir que input e botões sejam sempre visíveis */
+  .chat-input-area form {
+    width: 100% !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+    align-items: center !important;
+  }
+  
+  .chat-input-area textarea,
+  .chat-input-area input {
+    flex: 1 !important;
+    min-width: 0 !important;
+    max-height: 80px !important;
+    overflow-y: auto !important;
+  }
+  
+  .chat-input-area button {
+    flex-shrink: 0 !important;
+  }
+  
+  /* Conversations List Styling - WhatsApp style */
+  .sidebar-conversations-list {
+    background: #111827;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-bottom: 80px !important; /* Espaço para botão inferior */
+  }
+  
+  /* FIX: Prevenir texto cortado em items da lista */
+  .sidebar-conversations-list .flex-1 {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .sidebar-conversations-list .truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+  }
+  
+  /* FIX: Garantir que última mensagem não seja cortada */
+  .sidebar-conversations-list p:last-child,
+  .sidebar-conversations-list span:last-child {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+  }
+  
+  /* FIX: Input de pesquisa responsivo em mobile */
+  .chat-sidebar input[type="text"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  
+  /* FIX: Container de pesquisa */
+  .chat-sidebar > div > div {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+  
+  /* Individual conversation item - WhatsApp style */
+  .chat-sidebar .motion-div {
+    border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+    transition: background-color 0.2s ease;
+    padding: 0.75rem 1rem !important;
+    min-height: 72px !important;
+  }
+  
+  /* FIX: Garantir que conteúdo do item não seja cortado */
+  .chat-sidebar .motion-div > div {
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  
+  .chat-sidebar .motion-div:hover {
+    background: rgba(31, 41, 55, 0.5);
+  }
+  
+  .chat-sidebar .motion-div:active {
+    background: rgba(31, 41, 55, 0.7);
+  }
+  
+  /* FIX: Garantir que botões fixos na parte inferior sejam visíveis */
+  .chat-sidebar > div:last-child {
+    position: sticky !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 50 !important;
+    background: rgba(17, 24, 39, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    padding: 1rem !important;
+    border-top: 1px solid rgba(139, 92, 246, 0.2) !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  /* FIX: Corrigir overflow em cards de proposta/marketplace */
+  .marketplace-order-status-sticky,
+  .chat-cta-sticky {
+    margin: 0 !important;
+    padding: 0.75rem 1rem !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+  }
+  
+  /* FIX: Garantir que modals sejam totalmente visíveis */
+  .modal-backdrop + div {
+    max-height: 90vh !important;
+    max-height: 90dvh !important;
+    overflow-y: auto !important;
+    margin: 5vh auto !important;
+  }
+  
+  /* FIX: Ajustar bolhas de mensagem para não serem cortadas */
+  .bubble-base {
+    max-width: 85% !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  /* FIX: Avatar e nome do usuário no header */
+  .chat-header .flex.items-center {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .chat-header h2 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+  
+  /* FIX: Badges e labels não devem quebrar layout */
+  .temporary-chat-label,
+  .expired-chat-label,
+  .expiry-time {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+  
+  /* FIX: Modal de configurações - ajustar para mobile */
+  .modal-backdrop {
+    padding: 0.5rem !important;
+  }
+  
+  .modal-backdrop > div {
+    max-width: 100% !important;
+    max-height: 85vh !important;
+    max-height: 85dvh !important;
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  /* Garantir scroll interno no modal */
+  .modal-backdrop > div > div:last-child {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+  }
+  
+  /* Ajustar conteúdo interno do modal */
+  .modal-backdrop div[class*="p-6"] {
+    padding: 1rem !important;
+  }
+  
+  .modal-backdrop div[class*="space-y-4"] {
+    gap: 0.75rem !important;
+  }
+  
+  .modal-backdrop div[class*="space-y-3"] {
+    gap: 0.625rem !important;
+  }
+  
+  /* Botões do modal mais compactos */
+  .modal-backdrop button[class*="p-4"] {
+    padding: 0.75rem !important;
+  }
+  
+  .modal-backdrop button span {
+    font-size: 0.9375rem !important;
+  }
+  
+  .modal-backdrop button p {
+    font-size: 0.8125rem !important;
+    margin-top: 0.25rem !important;
+  }
+  
+  /* Ícones do modal */
+  .modal-backdrop svg {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+  }
+  
+  /* Header do modal */
+  .modal-backdrop h3 {
+    font-size: 1.125rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-fullscreen-container {
+    border-width: 1px;
+    height: calc(100dvh - var(--header-h, 64px));
+    max-height: calc(100dvh - var(--header-h, 64px));
+  }
+  
+  /* FIX: Modal ainda mais compacto para telas muito pequenas */
+  .modal-backdrop {
+    padding: 0.25rem !important;
+  }
+  
+  .modal-backdrop > div {
+    max-height: 90vh !important;
+    max-height: 90dvh !important;
+    border-radius: 1rem !important;
+  }
+  
+  /* Garantir que todo conteúdo seja acessível */
+  .modal-backdrop > div > div:last-child {
+    max-height: calc(90vh - 80px) !important;
+    max-height: calc(90dvh - 80px) !important;
+  }
+  
+  .chat-header {
+    padding: 0.75rem !important;
+    height: 65px !important;
+    max-height: 65px !important;
+  }
+  
+  .chat-messages-container {
+    padding: 0.75rem !important;
+  }
+  
+  .chat-input-area {
+    padding: 0.75rem !important;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
+    min-height: 70px !important;
+    max-height: 100px !important;
+  }
+  
+  /* FIX: Input deve ocupar toda largura disponível */
+  .chat-input-area form {
+    gap: 0.375rem !important;
+  }
+  
+  .chat-input-area textarea {
+    font-size: 14px !important;
+    padding: 0.625rem !important;
+  }
+  
+  .chat-input-area button {
+    padding: 0.5rem 0.75rem !important;
+    min-width: auto !important;
+  }
+  
+  /* Smaller padding for conversation items on very small screens */
+  .chat-sidebar .motion-div {
+    padding: 0.625rem 0.75rem !important;
+    min-height: 68px !important;
+  }
+  
+  /* Adjust avatar sizes for small screens */
+  .chat-sidebar .motion-div .w-10 {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+  
+  /* FIX: Garantir que texto da conversação seja totalmente visível */
+  .chat-sidebar .motion-div .text-xs,
+  .chat-sidebar .motion-div .text-sm {
+    font-size: 0.8125rem !important;
+    line-height: 1.25 !important;
+  }
+  
+  /* FIX: Última mensagem truncada com ellipsis */
+  .chat-sidebar .motion-div p {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+  }
+  
+  /* FIX: Input de pesquisa ajustado para telas pequenas */
+  .chat-sidebar input[type="text"] {
+    font-size: 0.875rem !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem !important;
+  }
+  
+  /* FIX: Header do chat mais compacto */
+  .chat-header .w-8,
+  .chat-header .w-10 {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  
+  .chat-header h2 {
+    font-size: 0.9375rem !important;
+  }
+  
+  .chat-header p {
+    font-size: 0.75rem !important;
+  }
+  
+  /* FIX: Badges e status mais compactos */
+  .temporary-chat-label,
+  .expired-chat-label {
+    font-size: 0.6875rem !important;
+    padding: 1px 6px !important;
+  }
+  
+  /* FIX: Bolhas de mensagem otimizadas */
+  .bubble-base {
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.875rem !important;
+    max-width: 88% !important;
+  }
+  
+  .message-meta {
+    font-size: 0.6875rem !important;
+    margin-top: 0.25rem !important;
+  }
+  
+  /* FIX: Modal de configurações para iPhone SE e similares */
+  .modal-backdrop div[class*="p-6"] {
+    padding: 0.75rem !important;
+  }
+  
+  .modal-backdrop button[class*="p-4"] {
+    padding: 0.625rem 0.75rem !important;
+  }
+  
+  .modal-backdrop button span {
+    font-size: 0.875rem !important;
+  }
+  
+  .modal-backdrop button p {
+    font-size: 0.75rem !important;
+    line-height: 1.25 !important;
+  }
+  
+  .modal-backdrop svg {
+    width: 1rem !important;
+    height: 1rem !important;
+  }
+  
+  .modal-backdrop h3 {
+    font-size: 1rem !important;
+  }
+  
+  /* Labels e textos menores */
+  .modal-backdrop label {
+    font-size: 0.8125rem !important;
+  }
+  
+  /* Espaçamento entre seções reduzido */
+  .modal-backdrop div[class*="space-x-3"] {
+    gap: 0.5rem !important;
+  }
+  
+  .modal-backdrop div[class*="space-x-4"] {
+    gap: 0.625rem !important;
+  }
+}
+
+/* Tablet responsive design */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .chat-sidebar {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+}
+
+/* Large screen optimization */
+@media (min-width: 1440px) {
+  .chat-sidebar {
+    width: 460px;
+    min-width: 460px;
+    max-width: 460px;
+  }
+  
+  .chat-messages-container {
+    padding: 2rem;
+  }
+  
+  .chat-header,
+  .chat-input-area {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  .marketplace-order-status-sticky {
+    margin: -2rem -2rem 1.5rem -2rem !important;
+    width: calc(100% + 4rem) !important;
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+  }
+  
+  .chat-messages-container .proposal-modal-fixed {
+    margin: -2rem -2rem 1rem -2rem !important;
+    width: calc(100% + 4rem) !important;
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+  }
+}
+
+/* Conversation list item enhancements */
+.conversation-item {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.75rem;
+  margin: 0.25rem 0.5rem;
+}
+
+/* FIX: Input de pesquisa não ultrapassar container */
+.chat-sidebar input[type="text"],
+.chat-sidebar input[placeholder*="Pesquisar"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* FIX: Container do input de pesquisa */
+.chat-sidebar .relative.flex-1 {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* FIX: Última mensagem com truncamento (WhatsApp style) */
+.sidebar-conversations-list p[class*="text-gray"],
+.sidebar-conversations-list .text-gray-400,
+.sidebar-conversations-list .text-gray-300 {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  display: block !important;
+  max-width: 100% !important;
+}
+
+.conversation-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%);
+  border-radius: 0 2px 2px 0;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.conversation-item:hover::before {
+  height: 60%;
+}
+
+.conversation-item.active::before {
+  height: 80%;
+}
+
+/* Avatar glow effect */
+.avatar-glow {
+  position: relative;
+}
+
+.avatar-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  filter: blur(8px);
+}
+
+.avatar-glow:hover::after {
+  opacity: 0.6;
+}
+
+/* Message timestamp fade-in */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-meta {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Typing indicator animation */
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
+}
+
+.typing-dot {
+  animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Ensure no content overflows */
+.chat-fullscreen-container * {
+  box-sizing: border-box;
+}
+
+/* Animation for smooth transitions */
+.chat-content-wrapper {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Pulse animation for unread indicator */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.unread-pulse {
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+/* Ensure proper z-index stacking */
+.chat-fullscreen-container {
+  z-index: 1;
+}
+
+.chat-sidebar {
+  z-index: 2;
+}
+
+.chat-main-area {
+  z-index: 1;
+}
+
+/* Remove mobile overlay - not needed for WhatsApp-like design */
+.mobile-overlay {
+  display: none;
+}
+
+/* Modal overlay - ensure full screen coverage on all devices */
+.modal-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100svh !important;
+  height: 100dvh !important;
+  z-index: 2147483647 !important; /* Max practical z-index to beat any stacking context */
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Hierarquia de z-index inteligente para navegação harmoniosa */
+
+/* Header principal - sempre visível */
+#root .min-h-screen header {
+  z-index: var(--layer-header) !important;
+  position: relative;
+}
+
+/* Sidebar - abaixo do header mas acima do chat */
+#root .ease-in-out .p-6 {
+  z-index: var(--layer-sidebar) !important;
+}
+
+/* Chat container - baixo por padrão para não interferir */
+.mx-auto div .chat-fullscreen-container {
+  z-index: auto;
+}
+
+/* Mobile: Chat em fullscreen quando ativo */
+@media (max-width: 768px) {
+  /* Chat principal com z-index moderado */
+  .chat-fullscreen-container { z-index: auto; }
+  
+  /* Quando chat está em modo de conversa individual */
+  .chat-main-area.mobile-visible { z-index: auto; }
+  
+  /* Header permanece acima do chat em mobile */
+  #root .min-h-screen header {
+    z-index: 1000 !important;
+    position: relative;
+  }
+  
+  /* Sidebar escondida quando chat ativo em mobile */
+  .chat-sidebar.mobile-hidden {
+    z-index: 1;
+  }
+  
+  /* Garantir que sidebar não sobreponha quando visível */
+  .chat-sidebar:not(.mobile-hidden) { z-index: var(--layer-sidebar); }
+}
+
+@media (max-width: 1024px) {
+  .mx-auto div .chat-fullscreen-container {
+    z-index: auto;
+  }
+}
+@media (max-width: 768px) {
+  .mx-auto div .chat-fullscreen-container {
+    z-index: auto;
+  }
+}
+@media (max-width: 640px) {
+  .mx-auto div .chat-fullscreen-container {
+    z-index: auto;
+  }
+}
+@media (max-width: 480px) {
+  .mx-auto div .chat-fullscreen-container {
+    z-index: auto;
+  }
+}
+@media (max-width: 360px) {
+  .mx-auto div .chat-fullscreen-container {
+    z-index: auto;
+  }
+}
+
+/* ✨ Estilos para mensagens longas - quebra de linha adequada */
+.chat-message-content {
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  max-width: 100% !important;
+  hyphens: auto !important;
+  -webkit-hyphens: auto !important;
+  -moz-hyphens: auto !important;
+  -ms-hyphens: auto !important;
+}
+
+/* Garantir que o container da mensagem não ultrapasse limites */
+.chat-message-container {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  word-wrap: break-word !important;
+}
+
+/* Estilos para Chat Temporário */
+.temporary-chat-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(251, 146, 60, 0.2);
+  color: rgb(251, 146, 60);
+  border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.expired-chat-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(239, 68, 68, 0.2);
+  color: rgb(239, 68, 68);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.expiry-time {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 400;
+  background: rgba(251, 146, 60, 0.15);
+  color: rgb(251, 191, 36);
+  border: 1px solid rgba(251, 146, 60, 0.2);
+}

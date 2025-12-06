@@ -1,0 +1,137 @@
+/* ========================================
+   Header - User Dropdown Mobile Fixes
+   ======================================== */
+
+/* Desktop: comportamento normal de hover */
+@media (min-width: 769px) {
+  .user-dropdown {
+    pointer-events: auto;
+  }
+}
+
+/* Mobile: dropdown mais compacto e touch-friendly */
+@media (max-width: 768px) {
+  /* Garantir que o dropdown seja clicável */
+  .user-dropdown {
+    pointer-events: auto !important;
+    touch-action: manipulation;
+  }
+  
+  /* Quando visível, garantir z-index alto */
+  .user-dropdown.opacity-100 {
+    pointer-events: auto !important;
+  }
+  
+  /* Reduzir largura do dropdown */
+  .user-dropdown {
+    width: 9rem !important; /* 144px */
+    min-width: 9rem !important;
+  }
+  
+  /* Padding mais compacto */
+  .user-dropdown > div {
+    padding: 0.375rem !important;
+  }
+  
+  /* Botões menores e mais compactos */
+  .user-dropdown button {
+    padding: 0.5rem 0.625rem !important;
+    font-size: 0.8125rem !important; /* 13px */
+    line-height: 1.3 !important;
+    min-height: 36px;
+  }
+  
+  /* Touch feedback */
+  .user-dropdown button:active {
+    transform: scale(0.98);
+    background-color: rgb(55, 65, 81) !important;
+  }
+  
+  /* Garantir que o dropdown não saia da tela */
+  .user-dropdown {
+    right: 0;
+    left: auto;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* Telas muito pequenas (iPhone SE, etc) */
+@media (max-width: 480px) {
+  /* Dropdown ainda menor */
+  .user-dropdown {
+    width: 8rem !important; /* 128px */
+    min-width: 8rem !important;
+  }
+  
+  /* Padding ultra-compacto */
+  .user-dropdown > div {
+    padding: 0.25rem !important;
+  }
+  
+  /* Botões ultra-compactos */
+  .user-dropdown button {
+    padding: 0.375rem 0.5rem !important;
+    font-size: 0.75rem !important; /* 12px */
+    min-height: 32px;
+  }
+  
+  /* Garantir visibilidade dos textos */
+  .user-dropdown button {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Melhorar área de toque em mobile */
+@media (max-width: 768px) and (pointer: coarse) {
+  /* Aumentar área de toque dos botões do dropdown */
+  .user-dropdown button {
+    min-height: 44px; /* Apple guidelines */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  /* Feedback visual imediato no toque */
+  .user-dropdown button:active {
+    background-color: rgb(55, 65, 81) !important;
+  }
+}
+
+/* Prevenir problemas de z-index */
+.user-dropdown {
+  z-index: 9999 !important;
+}
+
+/* Animação suave */
+.user-dropdown {
+  transform-origin: top right;
+  transition: opacity 200ms ease-in-out, 
+              visibility 200ms ease-in-out,
+              transform 200ms ease-in-out;
+}
+
+.user-dropdown.opacity-0 {
+  transform: translateY(-0.5rem) scale(0.95);
+}
+
+.user-dropdown.opacity-100 {
+  transform: translateY(0) scale(1);
+}
+
+/* Backdrop sutil em mobile quando dropdown está aberto */
+@media (max-width: 768px) {
+  /* Adicionar overlay sutil (opcional) */
+  .user-dropdown.opacity-100::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: -1;
+    pointer-events: none;
+  }
+}

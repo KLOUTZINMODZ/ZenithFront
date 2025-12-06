@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/Assets/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/Assets/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/Assets/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Assets/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZenithGG - Marketplace de Gaming</title>
+    <meta name="description" content="O maior marketplace de gaming do Brasil. Compre, venda e troque skins, contas e boosts com segurança total." />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="zenithgg, marketplace de gaming, comprar skins, vender skins, contas de jogos, boosting, elo job, itens de jogos, mercado gamer, marketplace gamer Brasil" />
+    <meta name="author" content="ZenithGG" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ZenithGG" />
+    <meta property="og:title" content="ZenithGG - Marketplace de Gaming" />
+    <meta property="og:description" content="Descubra o maior marketplace de gaming do Brasil. Compre, venda e troque skins, contas e boosts com total segurança." />
+    <meta property="og:url" content="https://zenithgg.com.br/" />
+    <meta property="og:image" content="https://zenithgg.com.br/Assets/social-share.png" />
+    <meta property="og:image:alt" content="ZenithGG - Marketplace de Gaming" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ZenithGG - Marketplace de Gaming" />
+    <meta name="twitter:description" content="Compre, venda e troque skins, contas e boosts com segurança total no maior marketplace de gaming do Brasil." />
+    <meta name="twitter:image" content="https://zenithgg.com.br/Assets/social-share.png" />
+    <link rel="canonical" href="https://zenithgg.com.br/" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ZenithGG" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="ZenithGG" />
+    <meta name="msapplication-TileColor" content="#0f172a" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="manifest" href="/Assets/site.webmanifest" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ZenithGG",
+        "url": "https://zenithgg.com.br/",
+        "description": "O maior marketplace de gaming do Brasil. Compre, venda e troque skins, contas e boosts com segurança total.",
+        "inLanguage": "pt-BR",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://zenithgg.com.br/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ZenithGG",
+          "url": "https://zenithgg.com.br/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://zenithgg.com.br/Assets/favicon-512x512.png"
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="modal-root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1"></script>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+        });
+      }
+    </script>
+  </body>
+</html>

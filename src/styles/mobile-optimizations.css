@@ -1,0 +1,215 @@
+/* Mobile-First Optimizations */
+
+/* Touch target optimization - Mínimo 44x44px para toque confortável */
+@media (max-width: 767px) {
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent 300ms tap delay */
+  * {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Optimize text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Improve input zoom */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important; /* Previne zoom no iOS */
+  }
+  
+  /* Safe area insets para notch */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Optimize animations for mobile */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* Prevent text size adjustment on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* Optimize images */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Better touch feedback */
+  .touch-feedback {
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  }
+  
+  .touch-feedback:active {
+    transform: scale(0.96);
+    opacity: 0.8;
+  }
+  
+  /* Pull-to-refresh prevention for specific areas */
+  .no-pull-refresh {
+    overscroll-behavior-y: contain;
+  }
+  
+  /* Optimize carousel swipe */
+  .carousel-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+  
+  .carousel-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Slightly larger touch targets for tablet */
+  button,
+  a,
+  [role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Landscape mobile optimizations */
+@media (max-width: 767px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape */
+  .space-y-6 > * + * {
+    margin-top: 1rem !important;
+  }
+  
+  /* Optimize header height */
+  header {
+    height: auto;
+    min-height: 48px;
+  }
+}
+
+/* High DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Dark mode adjustments for mobile */
+@media (max-width: 767px) and (prefers-color-scheme: dark) {
+  /* Ensure proper contrast */
+  .text-gray-400 {
+    color: rgb(156 163 175) !important;
+  }
+  
+  .text-gray-600 {
+    color: rgb(107 114 128) !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (max-width: 767px) {
+  /* Focus visible for keyboard navigation */
+  *:focus-visible {
+    outline: 2px solid #a855f7;
+    outline-offset: 2px;
+  }
+  
+  /* Skip link for screen readers */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #a855f7;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+  }
+  
+  .skip-link:focus {
+    top: 0;
+  }
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Loading states */
+@media (max-width: 767px) {
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
