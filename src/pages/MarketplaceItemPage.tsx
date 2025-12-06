@@ -186,6 +186,8 @@ const MarketplaceItemPage: React.FC = () => {
     };
   }, [item]);
 
+  const showSavingsHighlight = pricingDetails ? pricingDetails.percent > 0 && pricingDetails.savings > 0 : false;
+
   const detailRows = useMemo(() => {
     if (!item) return [] as { label: string; value: string }[];
     const rows: Array<{ label: string; value: string }> = [];
@@ -711,8 +713,8 @@ const MarketplaceItemPage: React.FC = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-        {}
-        <div className="lg:col-span-8 space-y-4 sm:space-y-6">
+        {/* Galeria do item - sempre primeiro no mobile */}
+        <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-1 lg:order-1">
           {}
           <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700">
             <AnimatePresence mode="wait">
@@ -759,6 +761,186 @@ const MarketplaceItemPage: React.FC = () => {
             </div>
           )}
           
+          {}
+        </div>
+
+        {/* Painel de preço / vendedor - prioridade logo após a imagem no mobile */}
+        <div className="lg:col-span-4 space-y-4 sm:space-y-6 order-2 lg:order-3">
+          {}
+          <div className="bg-gray-800 rounded-xl p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 gap-2">
+              <span className="px-2 sm:px-3 py-1 bg-purple-600/20 text-purple-400 text-xs sm:text-sm rounded-full flex-shrink-0">
+                {item.category}
+              </span>
+              <span className="px-2 sm:px-3 py-1 bg-blue-600/20 text-blue-400 text-xs sm:text-sm rounded-full flex-shrink-0">
+                {item.game}
+              </span>
+            </div>
+            {item.detached && (
+              <div className="mb-3">
+                <span className="inline-flex items-center gap-1 bg-yellow-500 text-black px-2 py-1 rounded text-xs font-semibold shadow">
+                  <Star className="w-3 h-3" /> Patrocinado
+                </span>
+              </div>
+            )}
+            
+            <h1 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 leading-tight">{item.title}</h1>
+            
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 text-sm sm:text-base">
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span className="text-white">{(Number(item.rating.average) || 0).toFixed(1)}</span>
+              </div>
+              <span className="text-gray-400">({item.rating.count} avaliações)</span>
+              <div className="flex items-center gap-1">
+                <Eye className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-400">{item.views} visualizações</span>
+              </div>
+            </div>
+            
+            <div className="mb-4 sm:mb-6">
+              {pricingDetails?.original ? (
+                <div className="text-lg text-gray-400 line-through">
+                  {formatCurrency(pricingDetails.original)}
+                </div>
+              ) : null}
+              <div className="text-2xl sm:text-3xl font-bold text-white">
+                {formatCurrency(pricingDetails?.price || item.price)}
+              </div>
+              {showSavingsHighlight && (
+                <div className="mt-2 inline-flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-3 py-1.5 bg-green-600/10 text-green-300 border border-green-600/30 rounded-lg text-xs sm:text-sm">
+                  <span className="font-semibold">{pricingDetails.percent}% OFF</span>
+                  <span className="text-gray-300">Economia de {formatCurrency(pricingDetails.savings)}</span>
+                </div>
+              )}
+            </div>
+            {stockInfo.show && stockInfo.left > 0 && (
+              <div className="mb-3 sm:mb-4">
+                <div className="inline-flex items-center gap-2 px-2 py-1 rounded-full bg-green-600/15 text-green-300 text-xs sm:text-sm">
+                  <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                  Estoque disponível:<span className="text-white font-semibold">{stockInfo.left}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Botões de ação */}
+            <div className="flex gap-3">
+              {/* Botão Favoritar */}
+              <motion.button
+                onClick={handleToggleFavorite}
+                className={`
+                  flex items-center justify-center gap-2 px-4 py-3 sm:py-4 rounded-lg font-medium
+                  transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800
+                  text-sm sm:text-base
+                  ${isFavorite(item?._id || '') 
+                    ? 'bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 text-white focus:ring-pink-500' 
+                    : 'bg-white/10 hover:bg-white/20 text-white border border-white/20 focus:ring-white/50'
+                  }
+                `}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                title={isFavorite(item?._id || '') ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+              >
+                <Heart 
+                  className={`w-5 h-5 ${isFavorite(item?._id || '') ? 'fill-white' : ''}`} 
+                />
+  
+              </motion.button>
+
+              {/* Botão Comprar */}
+              <motion.button 
+                onClick={handlePurchase}
+                disabled={purchasing || soldOut}
+                className="
+                  flex-1 py-3 sm:py-4 px-4 bg-gradient-to-r from-purple-600 to-blue-600 
+                  text-white rounded-lg font-medium flex items-center justify-center gap-2
+                  hover:from-purple-700 hover:to-blue-700 
+                  transition-all duration-200
+                  focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800
+                  disabled:opacity-70 disabled:cursor-not-allowed
+                  text-sm sm:text-base
+                "
+                whileHover={purchasing ? {} : { scale: 1.02 }}
+                whileTap={purchasing ? {} : { scale: 0.98 }}
+              >
+              {purchasing ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Processando...
+                </>
+              ) : soldOut ? (
+                <>
+                  Produto já vendido
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="w-5 h-5" />
+                  Comprar Agora
+                </>
+              )}
+              </motion.button>
+            </div>
+          </div>
+
+          <div className="bg-gray-800 rounded-xl p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Informações do Vendedor</h3>
+            <div className="flex items-center gap-3 sm:gap-4 mb-4">
+              <Link
+                to={`/users/${item.seller?._id || item.seller?.userid}`}
+                className="flex items-center gap-4 group hover:opacity-90 transition focus:outline-none"
+                aria-label="Abrir perfil do vendedor"
+              >
+                <span className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center overflow-hidden ring-0 group-hover:ring-2 group-hover:ring-purple-500 transition">
+                  {item.seller?.avatar ? (
+                    <img src={item.seller?.avatar} alt={item.seller?.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="w-6 h-6 text-gray-300" />
+                  )}
+                </span>
+                <span className="text-left">
+                  <h4 className="text-white font-medium group-hover:text-purple-400 transition-colors">{item.seller?.name}</h4>
+                  <p className="text-gray-400 text-sm">
+                    Membro desde {item.seller?.joinDate ? formatDate(item.seller?.joinDate) : '—'}
+                  </p>
+                </span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+              <div className="bg-gray-700/50 p-3 rounded-lg">
+                <div className="text-gray-400 text-xs sm:text-sm mb-1">Avaliação</div>
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="text-sm sm:text-base text-white font-medium">
+                    {(item.seller?.rating || 0).toFixed(1)}
+                  </span>
+                </div>
+              </div>
+              <div className="bg-gray-700/50 p-3 rounded-lg">
+                <div className="text-gray-400 text-xs sm:text-sm mb-1">Vendas</div>
+                <div className="text-sm sm:text-base text-white font-medium">
+                  {item.seller?.totalSales || 0}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+              <span className="px-2 py-1 rounded-full bg-gray-700/60">Visto por {item.views} pessoas</span>
+              <span className="px-2 py-1 rounded-full bg-gray-700/60">
+                {item.status === 'sold' ? 'Produto vendido' : 'Disponível'}
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-gray-800 rounded-xl p-6">
+            <div className="text-gray-400 text-sm">
+              Publicado em {formatDate(item.createdAt)} • Atualizado em {formatDate(item.updatedAt)}
+            </div>
+          </div>
+        </div>
+
+        {/* Conteúdo adicional - aparece após preço no mobile */}
+        <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-3 lg:order-1">
           {}
           <div className="bg-gray-800 rounded-xl p-4 sm:p-6">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Descrição</h3>
@@ -1046,7 +1228,7 @@ const MarketplaceItemPage: React.FC = () => {
               <div className="text-2xl sm:text-3xl font-bold text-white">
                 {formatCurrency(pricingDetails?.price || item.price)}
               </div>
-              {pricingDetails?.percent && pricingDetails.percent > 0 && pricingDetails.savings > 0 && (
+              {showSavingsHighlight && (
                 <div className="mt-2 inline-flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-3 py-1.5 bg-green-600/10 text-green-300 border border-green-600/30 rounded-lg text-xs sm:text-sm">
                   <span className="font-semibold">{pricingDetails.percent}% OFF</span>
                   <span className="text-gray-300">Economia de {formatCurrency(pricingDetails.savings)}</span>

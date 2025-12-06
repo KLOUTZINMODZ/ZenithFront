@@ -448,17 +448,19 @@ const NewServicePage: React.FC = () => {
       newErrors.originalPrice = `Valor original máximo permitido é R$ ${PRICE_LIMITS.MAX.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
     if (!formData.condition) newErrors.condition = 'Informe o estado do item';
-    const priceNumeric = parseFloat(formData.price || '');
-    if (!formData.price.trim()) {
-      newErrors.price = 'Preço é obrigatório';
-    } else if (isNaN(priceNumeric) || priceNumeric <= 0) {
-      newErrors.price = 'Preço deve ser um valor positivo';
-    } else if (priceNumeric < PRICE_LIMITS.MIN) {
-      newErrors.price = `Valor mínimo permitido é R$ ${PRICE_LIMITS.MIN.toFixed(2).replace('.', ',')}`;
-    } else if (priceNumeric > PRICE_LIMITS.MAX) {
-      newErrors.price = `Valor máximo permitido é R$ ${PRICE_LIMITS.MAX.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    } else if (!Number.isNaN(originalNumeric) && originalNumeric > 0 && priceNumeric > originalNumeric) {
-      newErrors.price = 'Preço com desconto deve ser menor ou igual ao preço original';
+    const trimmedDiscountPrice = formData.price.trim();
+    const hasDiscountPrice = Boolean(trimmedDiscountPrice);
+    const priceNumeric = hasDiscountPrice ? parseFloat(trimmedDiscountPrice) : NaN;
+    if (hasDiscountPrice) {
+      if (isNaN(priceNumeric) || priceNumeric <= 0) {
+        newErrors.price = 'Preço com desconto deve ser um valor positivo';
+      } else if (priceNumeric < PRICE_LIMITS.MIN) {
+        newErrors.price = `Valor mínimo permitido é R$ ${PRICE_LIMITS.MIN.toFixed(2).replace('.', ',')}`;
+      } else if (priceNumeric > PRICE_LIMITS.MAX) {
+        newErrors.price = `Valor máximo permitido é R$ ${PRICE_LIMITS.MAX.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      } else if (!Number.isNaN(originalNumeric) && originalNumeric > 0 && priceNumeric > originalNumeric) {
+        newErrors.price = 'Preço com desconto deve ser menor ou igual ao preço original';
+      }
     }
     if (!formData.description.trim()) {
       newErrors.description = 'Descrição é obrigatória';
@@ -538,6 +540,17 @@ const NewServicePage: React.FC = () => {
       }
 
       const normalizedTags = splitTags(formData.tags).slice(0, MAX_TAGS);
+      const parseNumericField = (value?: string) => {
+        if (!value || !value.trim()) return undefined;
+        const parsed = parseFloat(value);
+        return Number.isNaN(parsed) ? undefined : parsed;
+      };
+      const originalPriceValue = parseNumericField(formData.originalPrice);
+      const discountPriceValue = parseNumericField(formData.price);
+      const finalPrice = discountPriceValue ?? originalPriceValue;
+      if (typeof finalPrice !== 'number') {
+        throw new Error('Preço final não pôde ser determinado');
+      }
 
       const requestData = {
         title: formData.title,
@@ -546,7 +559,8 @@ const NewServicePage: React.FC = () => {
         category: formData.category,
         ...(formData.subcategory?.trim() ? { subcategory: formData.subcategory.trim() } : {}),
         condition: formData.condition,
-        price: parseFloat(formData.price),
+        price: finalPrice,
+        ...(typeof originalPriceValue === 'number' ? { originalPrice: originalPriceValue } : {}),
         description: formData.description,
         deliveryMethod: formData.deliveryMethod,
         deliveryInstructions: formData.deliveryInstructions,
@@ -973,7 +987,7 @@ const NewServicePage: React.FC = () => {
 
                       <motion.div variants={itemVariants}>
                         <label className="block text-sm font-medium text-gray-300 mb-2">
-                          Preço com desconto *
+                          Preço com desconto (opcional)
                         </label>
                         <input
                           type="text"
@@ -997,7 +1011,7 @@ const NewServicePage: React.FC = () => {
                             </p>
                           </motion.div>
                         )}
-                        <p className="text-xs text-gray-400 mt-1">Preço com desconto: valor final após aplicar a promoção.</p>
+                        <p className="text-xs text-gray-400 mt-1">Deixe em branco para usar o preço original como valor final.</p>
                       </motion.div>
 
                       {formData.category && formData.category !== 'account' && (
