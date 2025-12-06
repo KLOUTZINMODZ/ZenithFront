@@ -1213,6 +1213,7 @@ const MarketplaceItemPage: React.FC = () => {
           </div>
         </div>
       </div>
+      </div>
       
       {}
       {relatedItems.length > 0 && (
