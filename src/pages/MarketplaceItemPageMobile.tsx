@@ -747,31 +747,27 @@ const MarketplaceItemPage: React.FC = () => {
         </div>
       )}
       
-      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
-        {}
-        <div className="mb-6">
-          <button 
-            onClick={() => navigate('/marketplace')} 
+      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 space-y-6">
+        <div className="mb-2">
+          <button
+            onClick={() => navigate('/marketplace')}
             className="flex items-center text-gray-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar para o Marketplace
           </button>
         </div>
-      
-      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-        {}
-        <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-2 lg:order-1">
-          {}
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
+
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
+          <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-2 lg:order-1">
+            <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Descrição</h3>
             <div className="text-sm sm:text-base text-gray-300 whitespace-pre-wrap break-words leading-relaxed max-w-full overflow-hidden">
               {item.description}
             </div>
           </div>
           
-          {}
-          {item.deliveryInstructions && (
+            {item.deliveryInstructions && (
             <div className="bg-gray-800 rounded-xl p-6 order-3 lg:order-none">
               <h3 className="text-xl font-bold text-white mb-4">Instruções de Entrega</h3>
               <div className="p-4 bg-gray-700/50 rounded-lg text-gray-300 whitespace-pre-wrap break-words leading-relaxed max-w-full overflow-hidden">
@@ -780,8 +776,7 @@ const MarketplaceItemPage: React.FC = () => {
             </div>
           )}
 
-          {}
-          {hasAdditionalInfo && (
+            {hasAdditionalInfo && (
             <div className="bg-gray-800 rounded-xl p-4 sm:p-6 space-y-4 order-3 lg:order-none">
               <h3 className="text-lg sm:text-xl font-bold text-white">Informações do Serviço</h3>
 
@@ -828,8 +823,7 @@ const MarketplaceItemPage: React.FC = () => {
             </div>
           )}
           
-          {}
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
+            <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <div className="relative">
@@ -1006,9 +1000,7 @@ const MarketplaceItemPage: React.FC = () => {
           </div>
         </div>
         
-        {}
-        <div className="lg:col-span-4 space-y-4 sm:space-y-6 lg:sticky lg:top-6 self-start order-1 lg:order-2">
-          {}
+          <div className="lg:col-span-4 space-y-4 sm:space-y-6 lg:sticky lg:top-6 self-start order-1 lg:order-2">
           <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-2 lg:order-none">
             <div className="flex items-center justify-between mb-3 gap-2">
               <span className="px-2 sm:px-3 py-1 bg-purple-600/20 text-purple-400 text-xs sm:text-sm rounded-full flex-shrink-0">

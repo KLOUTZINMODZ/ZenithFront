@@ -713,8 +713,9 @@ const MarketplaceItemPage: React.FC = () => {
       </div>
       
       <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-        {}
-        <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-first lg:col-span-8 lg:order-none">
+        {/* Coluna principal */}
+        <div className="lg:col-span-8 order-2 lg:order-1 space-y-4 sm:space-y-6">
+          <div className="bg-gray-800 relative rounded-xl sm:rounded-2xl overflow-hidden border border-gray-700 order-1 lg:order-none">
             <AnimatePresence mode="wait">
               {selectedImage && !imageLoadError ? (
                 <motion.img
@@ -740,8 +741,7 @@ const MarketplaceItemPage: React.FC = () => {
               </div>
             )}
           </div>
-          
-          {}
+
           {galleryImages.length > 1 && (
             <div className="flex justify-center gap-2">
               {galleryImages.map((_, index) => (
@@ -758,10 +758,6 @@ const MarketplaceItemPage: React.FC = () => {
               ))}
             </div>
           )}
-        </div>
-        
-        {}
-        <div className="lg:col-span-8 space-y-4 sm:space-y-6 order-2 lg:order-1">
           {}
           <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-3 lg:order-none">
             <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Descrição</h3>
@@ -1007,6 +1003,7 @@ const MarketplaceItemPage: React.FC = () => {
         </div>
         
         {}
+        {/* Coluna lateral */}
         <div className="lg:col-span-4 space-y-4 sm:space-y-6 lg:sticky lg:top-6 self-start order-1 lg:order-2">
           {}
           <div className="bg-gray-800 rounded-xl p-4 sm:p-6 order-2 lg:order-none">
