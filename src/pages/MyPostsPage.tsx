@@ -567,7 +567,7 @@ const MyPostsPage: React.FC = () => {
                   transition={{ delay: 0.2 }}
                 >
                   <span className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-full shadow-lg backdrop-blur-sm border ${statusBadge(item.status)}`}>
-                    {item.status === 'active' ? '✓ Ativo' : item.status === 'inactive' ? '⏸ Inativo' : 'Vendido'}
+                    {item.status === 'active' ? '✓ Ativo' : item.status === 'inactive' ? 'Inativo' : 'Vendido'}
                   </span>
                 </motion.div>
 
