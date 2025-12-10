@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { marketplaceService } from '../services';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
-import { Loader2, Filter, Star, FileText, Shield, Plus, BarChart3, AlertCircle, Eye, Trash2, X, ShoppingCart, Copy } from 'lucide-react';
+import { Loader2, Filter, Star, FileText, Shield, Plus, AlertCircle, Eye, Trash2, X, ShoppingCart, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import FilterModal from '../components/filters/FilterModal';
@@ -331,71 +331,84 @@ const MyPostsPage: React.FC = () => {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500 flex items-center gap-2">
-            <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0" /> 
-            <span className="truncate">Minhas Publicações</span>
-          </h1>
-          <p className="text-gray-400 flex items-center gap-2 text-sm sm:text-base mt-1">
-            <Shield className="w-4 h-4 flex-shrink-0" /> 
-            <span className="truncate">Gerencie seus serviços publicados com segurança</span>
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-          >
-            <div className="flex space-x-3">
-
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 p-6 sm:p-8">
+            <div className="pointer-events-none absolute inset-0 opacity-60">
+              <div className="absolute -top-16 -right-6 h-40 w-40 bg-purple-500/50 blur-[90px]" />
+              <div className="absolute -bottom-12 -left-10 h-32 w-32 bg-blue-500/40 blur-[70px]" />
             </div>
-          </motion.div>
-          
-          <Link
-            to="/post-service"
-            className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition-all duration-200 hover:scale-105 text-sm sm:text-base whitespace-nowrap"
-          >
-            <Plus className="w-4 h-4 flex-shrink-0" /> Nova Publicação
-          </Link>
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center">
+              <div className="flex-1 min-w-0">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/80">
+                  <Star className="w-3.5 h-3.5 text-yellow-300" />
+                  minhas publicações
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
+                    <FileText className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight text-white">
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-100 via-purple-50 to-blue-200">
+                        Minhas Publicações
+                      </span>
+                    </h1>
+                    <p className="mt-2 text-sm sm:text-base text-white/70">
+                      Gerencie seus serviços publicados com segurança e controle total.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 text-sm text-white/80 w-full max-w-xs">
+                <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Total publicado</p>
+                  <p className="text-lg font-semibold text-white">{totalLabel}</p>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-white/70">
+                  <Shield className="w-4 h-4" />
+                  Suas publicações estão protegidas
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    to="/post-service"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur transition-all duration-200"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span className="text-sm font-medium">Nova Publicação</span>
+                  </Link>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setIsFilterOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span className="text-sm font-medium">Filtros</span>
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-xs sm:text-sm text-gray-300 flex items-center gap-1">
-            <BarChart3 className="w-4 h-4 flex-shrink-0" /> 
-            <span className="truncate">{totalLabel}</span>
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => setIsFilterOpen(true)}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white border border-gray-700"
-          >
-            <Filter className="w-4 h-4" />
-            <span>Filtros</span>
-          </motion.button>
-        </div>
-
-        <FilterModal
-          isOpen={isFilterOpen}
-          onClose={() => setIsFilterOpen(false)}
-          initial={{ category: selectedCategory, status }}
-          categories={['all', ...Array.from(new Set(itemsRaw.map((i) => i.category).filter(Boolean)))]}
-          statuses={['all', 'active', 'inactive', 'sold']}
-          showCategory={true}
-          showStatus={true}
-          showGame={false}
-          showSort={false}
-          onApply={(values) => {
-            setSelectedCategory(values.category ?? 'all');
-            setStatus((values.status as any) ?? 'all');
-            setPagination((prev) => ({ ...prev, page: 1 }));
-            setIsFilterOpen(false);
-          }}
-        />
-      </div>
+      <FilterModal
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        initial={{ category: selectedCategory, status }}
+        categories={['all', ...Array.from(new Set(itemsRaw.map((i) => i.category).filter(Boolean)))]}
+        statuses={['all', 'active', 'inactive', 'sold']}
+        showCategory={true}
+        showStatus={true}
+        showGame={false}
+        showSort={false}
+        onApply={(values) => {
+          setSelectedCategory(values.category ?? 'all');
+          setStatus((values.status as any) ?? 'all');
+          setPagination((prev) => ({ ...prev, page: 1 }));
+          setIsFilterOpen(false);
+        }}
+      />
 
       {}
       {loading ? (

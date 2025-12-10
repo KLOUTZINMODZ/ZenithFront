@@ -304,81 +304,83 @@ const MyBoostingsPage: React.FC = () => {
           transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="mb-6"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Meus Boostings
-              </h1>
-              <p className="text-gray-400 mt-1 text-sm">
-                Gerencie seus pedidos de boosting
-              </p>
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 p-6 sm:p-8">
+            <div className="pointer-events-none absolute inset-0 opacity-60">
+              <div className="absolute -top-16 -right-6 h-40 w-40 bg-purple-500/50 blur-[90px]" />
+              <div className="absolute -bottom-12 -left-10 h-32 w-32 bg-blue-500/40 blur-[70px]" />
             </div>
-            <div className="flex items-center gap-2">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-              >
-              </motion.div>
-              
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-              >
-                <Link
-                  to="/post-boosting"
-                  className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-lg text-white font-medium transition-all duration-200 shadow-lg hover:shadow-xl text-sm"
-                >
-                  <Plus className="w-5 h-5 mr-2" />
-                  Novo Boosting
-                </Link>
-              </motion.div>
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center">
+              <div className="flex-1 min-w-0">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/80">
+                  <Target className="w-3.5 h-3.5 text-yellow-300" />
+                  meus boostings
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
+                    <Gamepad2 className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight text-white">
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-100 via-purple-50 to-blue-200">
+                        Meus Boostings
+                      </span>
+                    </h1>
+                    <p className="mt-2 text-sm sm:text-base text-white/70">
+                      Gerencie seus pedidos de boosting e acompanhe o progresso.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 text-sm text-white/80 w-full max-w-xs">
+                <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Boostings ativos</p>
+                  <p className="text-lg font-semibold text-white">{filteredBoostings.length} resultados</p>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-white/70">
+                  <Clock className="w-4 h-4" />
+                  Acompanhe em tempo real
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    to="/post-boosting"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur transition-all duration-200"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span className="text-sm font-medium">Novo Boosting</span>
+                  </Link>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setIsFilterOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span className="text-sm font-medium">Filtros</span>
+                  </motion.button>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
 
         {}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mb-4"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <Search className="w-4 h-4 text-gray-400 mr-2" />
-              <span className="text-sm text-gray-400">{filteredBoostings.length} resultados</span>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setIsFilterOpen(true)}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white border border-gray-700"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Filtros</span>
-            </motion.button>
-          </div>
-
-          <FilterModal
-            isOpen={isFilterOpen}
-            onClose={() => setIsFilterOpen(false)}
-            initial={{ game: gameFilter, status }}
-            games={availableGames}
-            statuses={['all', 'open', 'in_progress', 'completed', 'cancelled']}
-            showGame={true}
-            showStatus={true}
-            showCategory={false}
-            showSort={false}
-            onApply={(values) => {
-              setGameFilter(values.game ?? 'all');
-              setStatus((values.status as any) ?? 'all');
-              setPagination((prev) => ({ ...prev, page: 1 }));
-              setIsFilterOpen(false);
-            }}
-          />
-        </motion.div>
+        <FilterModal
+          isOpen={isFilterOpen}
+          onClose={() => setIsFilterOpen(false)}
+          initial={{ game: gameFilter, status }}
+          games={availableGames}
+          statuses={['all', 'open', 'in_progress', 'completed', 'cancelled']}
+          showGame={true}
+          showStatus={true}
+          showCategory={false}
+          showSort={false}
+          onApply={(values) => {
+            setGameFilter(values.game ?? 'all');
+            setStatus((values.status as any) ?? 'all');
+            setPagination((prev) => ({ ...prev, page: 1 }));
+            setIsFilterOpen(false);
+          }}
+        />
 
         {}
         <AnimatePresence mode="wait">
