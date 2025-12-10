@@ -323,14 +323,45 @@ const Marketplace: React.FC = () => {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500 flex items-center gap-2">
-            <ShoppingCart className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0" /> 
-            <span className="truncate">Marketplace</span>
-          </h1>
-          <p className="text-gray-400 flex items-center gap-2 text-sm sm:text-base mt-1">
-            <Package className="w-4 h-4 flex-shrink-0" /> 
-            <span className="truncate">Descubra e adquira itens incríveis para seus jogos</span>
-          </p>
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#1b1338] via-[#261055] to-[#090b17] p-6 sm:p-8 shadow-[0_25px_70px_rgba(88,40,220,0.35)]">
+            <div className="pointer-events-none absolute inset-0 opacity-60">
+              <div className="absolute -top-16 -right-6 h-40 w-40 bg-purple-500/50 blur-[90px]" />
+              <div className="absolute -bottom-12 -left-10 h-32 w-32 bg-blue-500/40 blur-[70px]" />
+            </div>
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center">
+              <div className="flex-1 min-w-0">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/80">
+                  <Star className="w-3.5 h-3.5 text-yellow-300" />
+                  marketplace premium
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
+                    <ShoppingCart className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight text-white">
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-100 via-purple-50 to-blue-200">
+                        Marketplace
+                      </span>
+                    </h1>
+                    <p className="mt-2 text-sm sm:text-base text-white/70">
+                      Seu hub para descobrir itens lendários, serviços exclusivos e drops limitados da comunidade gamer.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 text-sm text-white/80 w-full max-w-xs">
+                <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Disponíveis agora</p>
+                  <p className="text-lg font-semibold text-white">{totalLabel}</p>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-white/70">
+                  <Package className="w-4 h-4" />
+                  Descubra novidades selecionadas diariamente
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
