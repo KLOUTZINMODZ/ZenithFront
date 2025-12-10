@@ -323,7 +323,7 @@ const Marketplace: React.FC = () => {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#1b1338] via-[#261055] to-[#090b17] p-6 sm:p-8 shadow-[0_25px_70px_rgba(88,40,220,0.35)]">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0f0b1f] p-6 sm:p-8">
             <div className="pointer-events-none absolute inset-0 opacity-60">
               <div className="absolute -top-16 -right-6 h-40 w-40 bg-purple-500/50 blur-[90px]" />
               <div className="absolute -bottom-12 -left-10 h-32 w-32 bg-blue-500/40 blur-[70px]" />
@@ -350,7 +350,7 @@ const Marketplace: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3 text-sm text-white/80 w-full max-w-xs">
+              <div className="flex flex-col gap-4 text-sm text-white/80 w-full max-w-xs">
                 <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur">
                   <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Disponíveis agora</p>
                   <p className="text-lg font-semibold text-white">{totalLabel}</p>
@@ -358,6 +358,26 @@ const Marketplace: React.FC = () => {
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-white/70">
                   <Package className="w-4 h-4" />
                   Descubra novidades selecionadas diariamente
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setIsFavoritesOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur"
+                  >
+                    <Heart className="w-4 h-4" />
+                    <span className="text-sm font-medium">Favoritos</span>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setIsFilterOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span className="text-sm font-medium">Filtros</span>
+                  </motion.button>
                 </div>
               </div>
             </div>
@@ -402,26 +422,6 @@ const Marketplace: React.FC = () => {
               <div className="text-xs sm:text-sm text-gray-300 flex items-center gap-1">
                 <BarChart3 className="w-4 h-4 flex-shrink-0" />
                 <span className="truncate">{totalLabel}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setIsFavoritesOpen(true)}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white border border-gray-700"
-                >
-                  <Heart className="w-4 h-4" />
-                  <span>Favoritos</span>
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setIsFilterOpen(true)}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white border border-gray-700"
-                >
-                  <Filter className="w-4 h-4" />
-                  <span>Filtros</span>
-                </motion.button>
               </div>
             </div>
           </div>
