@@ -332,7 +332,7 @@ const Marketplace: React.FC = () => {
               <div className="flex-1 min-w-0">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/80">
                   <Star className="w-3.5 h-3.5 text-yellow-300" />
-                  marketplace
+                  marketplace gamer
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-4">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
