@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, Eye, Loader2, BarChart3, Package, Filter, Heart } from 'lucide-react';
+import { Star, ShoppingCart, Eye, Loader2, Package, Filter, Heart } from 'lucide-react';
 import { useFavorites } from '../contexts/FavoritesContext';
 import FavoritesWidget from './favorites/FavoritesWidget';
 import { useNotifications } from '../contexts/NotificationContext';
@@ -323,7 +323,7 @@ const Marketplace: React.FC = () => {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0f0b1f] p-6 sm:p-8">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 p-6 sm:p-8">
             <div className="pointer-events-none absolute inset-0 opacity-60">
               <div className="absolute -top-16 -right-6 h-40 w-40 bg-purple-500/50 blur-[90px]" />
               <div className="absolute -bottom-12 -left-10 h-32 w-32 bg-blue-500/40 blur-[70px]" />
@@ -332,7 +332,7 @@ const Marketplace: React.FC = () => {
               <div className="flex-1 min-w-0">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/80">
                   <Star className="w-3.5 h-3.5 text-yellow-300" />
-                  marketplace premium
+                  marketplace
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-4">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
@@ -417,16 +417,6 @@ const Marketplace: React.FC = () => {
       {!loading && !error && items.length > 0 && (
         <>
           {}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="text-xs sm:text-sm text-gray-300 flex items-center gap-1">
-                <BarChart3 className="w-4 h-4 flex-shrink-0" />
-                <span className="truncate">{totalLabel}</span>
-              </div>
-            </div>
-          </div>
-        
-        {}
         <FilterModal
           isOpen={isFilterOpen}
           onClose={() => setIsFilterOpen(false)}
