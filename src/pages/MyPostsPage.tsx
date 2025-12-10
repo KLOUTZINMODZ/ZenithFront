@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { marketplaceService } from '../services';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
-import { Loader2, Filter, Star, FileText, Shield, Plus, BarChart3, AlertCircle, Eye, Edit3, Trash2, DollarSign, X, ShoppingCart, Copy } from 'lucide-react';
+import { Loader2, Filter, Star, FileText, Shield, Plus, BarChart3, AlertCircle, Eye, Trash2, X, ShoppingCart, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import FilterModal from '../components/filters/FilterModal';
@@ -49,18 +49,11 @@ const MyPostsPage: React.FC = () => {
   const [status, setStatus] = useState<'active' | 'inactive' | 'sold' | 'all'>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-
-  const [editingItem, setEditingItem] = useState<MarketItem | null>(null);
-
-
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [editForm, setEditForm] = useState<Partial<MarketItem>>({});
-
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<MarketItem | null>(null);
@@ -237,76 +230,6 @@ const MyPostsPage: React.FC = () => {
     setItems(filtered);
   }, [selectedCategory, itemsRaw]);
 
-
-  const formatPriceInput = (value: string) => {
-
-    const numericValue = value.replace(/[^0-9]/g, '');
-    
-    if (numericValue.length === 0) {
-      return '';
-    }
-    
-
-    const cents = parseInt(numericValue, 10);
-    const formattedValue = (cents / 100).toFixed(2);
-    return formattedValue;
-  };
-
-  const handlePriceChange = (value: string) => {
-    const formatted = formatPriceInput(value);
-    setEditForm((f) => ({ ...f, price: formatted }));
-  };
-
-  const onOpenEdit = (item: MarketItem) => {
-    setEditingItem(item);
-    setEditForm({
-      title: item.title,
-      price: item.price,
-      category: item.category,
-      description: item.description,
-      status: item.status,
-      images: item.images || (item.image ? [item.image] : [])
-    });
-  };
-
-  const onSaveEdit = async () => {
-    if (!editingItem) return;
-    try {
-      setSaving(true);
-      const res = await marketplaceService.updateItem(editingItem._id, {
-        title: editForm.title,
-        price: editForm.price,
-        category: editForm.category,
-        description: editForm.description,
-        status: editForm.status,
-        images: editForm.images as string[] | undefined
-      } as Partial<MarketItem>);
-
-      if (res.success) {
-        addNotification({
-          title: 'Item atualizado',
-          message: 'As alterações foram salvas com sucesso.',
-          type: 'success'
-        });
-        setEditingItem(null);
-        await fetchMyItems(pagination.page);
-      } else {
-        addNotification({
-          title: 'Erro ao salvar',
-          message: res.message || 'Não foi possível atualizar o item',
-          type: 'error'
-        });
-      }
-    } catch (e) {
-      addNotification({
-        title: 'Erro ao salvar',
-        message: 'Falha na conexão com o servidor',
-        type: 'error'
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const onDelete = async (item: MarketItem) => {
 
@@ -658,18 +581,6 @@ const MyPostsPage: React.FC = () => {
                       whileTap={{ scale: 0.95 }}
                       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                         e.stopPropagation();
-                        onOpenEdit(item);
-                      }}
-                      title="Editar"
-                      className="p-2 rounded-lg bg-gray-700/80 hover:bg-gray-600 text-blue-400 hover:text-blue-300 transition-all duration-200 shadow-lg hover:shadow-blue-500/30"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
                         onDelete(item);
                       }}
                       title="Remover"
@@ -707,198 +618,6 @@ const MyPostsPage: React.FC = () => {
             Próxima
           </button>
         </div>
-      )}
-
-      {}
-      {editingItem && (
-        <AnimatePresence mode="wait">
-        <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setEditingItem(null)}
-        >
-          {/* Backdrop */}
-          <motion.div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
-
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="relative w-full max-w-2xl bg-gray-900/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="relative flex items-center justify-between p-5 border-b border-gray-800/60 bg-gradient-to-br from-purple-600/10 via-blue-600/5 to-transparent">
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-600/10 border border-purple-400/20 flex-shrink-0">
-                  <Edit3 className="w-5 h-5 text-purple-300" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-white font-bold text-base sm:text-lg truncate">Editar Publicação</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-400 truncate">Atualize as informações do seu item</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setEditingItem(null)}
-                className="p-2 rounded-lg hover:bg-gray-700/60 text-gray-300 transition-colors flex-shrink-0"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="p-5 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain">
-              <div className="space-y-5">
-                {/* Título */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Título do Produto
-                  </label>
-                  <input
-                    className="w-full bg-gray-800/80 text-white rounded-lg px-4 py-3 outline-none border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-800 transition-all duration-200 placeholder:text-gray-500"
-                    value={editForm.title || ''}
-                    onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))}
-                    placeholder="Ex: Conta Level 80 com Skins Raras"
-                  />
-                </div>
-
-                {/* Preço */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Preço
-                  </label>
-                  <div className="relative">
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                      <DollarSign className="w-5 h-5" />
-                    </div>
-                    <input
-                      type="text"
-                      className="w-full bg-gray-800/80 text-white rounded-lg pl-12 pr-4 py-3 outline-none border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-800 transition-all duration-200 placeholder:text-gray-500 font-medium"
-                      value={editForm.price ? `R$ ${editForm.price}` : ''}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9]/g, '');
-                        handlePriceChange(value);
-                      }}
-                      placeholder="R$ 0,00"
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1.5">Digite os centavos primeiro (ex: 1500 = R$ 15,00)</p>
-                </div>
-
-                {/* Categoria */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Categoria
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {['Conta', 'Item', 'Skin', 'Outro'].map((cat) => (
-                      <motion.button
-                        key={cat}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setEditForm((f) => ({ ...f, category: cat }))}
-                        className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 border ${
-                          editForm.category === cat
-                            ? 'bg-gradient-to-br from-purple-600/90 to-purple-700/90 text-white border-purple-500/50 shadow-lg shadow-purple-900/30'
-                            : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/70 border-gray-700/50 hover:border-gray-600/50'
-                        }`}
-                      >
-                        {cat}
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Descrição */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Descrição
-                  </label>
-                  <textarea
-                    className="w-full bg-gray-800/80 text-white rounded-lg px-4 py-3 outline-none border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-800 transition-all duration-200 resize-none placeholder:text-gray-500"
-                    rows={4}
-                    value={editForm.description || ''}
-                    onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
-                    placeholder="Descreva detalhadamente seu produto..."
-                  />
-                  <p className="text-xs text-gray-500 mt-1.5">{editForm.description?.length || 0} caracteres</p>
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Status da Publicação
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { value: 'active', label: 'Ativo', gradient: 'from-green-600/90 to-green-700/90', border: 'border-green-500/50', shadow: 'shadow-green-900/30' },
-                      { value: 'inactive', label: 'Inativo', gradient: 'from-gray-600/90 to-gray-700/90', border: 'border-gray-500/50', shadow: 'shadow-gray-900/30' },
-                      { value: 'sold', label: 'Vendido', gradient: 'from-blue-600/90 to-blue-700/90', border: 'border-blue-500/50', shadow: 'shadow-blue-900/30' }
-                    ].map((statusOption) => (
-                      <motion.button
-                        key={statusOption.value}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setEditForm((f) => ({ ...f, status: statusOption.value as MarketItem['status'] }))}
-                        className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 border ${
-                          editForm.status === statusOption.value
-                            ? `bg-gradient-to-br ${statusOption.gradient} text-white ${statusOption.border} shadow-lg ${statusOption.shadow}`
-                            : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/70 border-gray-700/50 hover:border-gray-600/50'
-                        }`}
-                      >
-                        {statusOption.label}
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="p-5 border-t border-gray-800/60 bg-gray-900/50 backdrop-blur-sm">
-              <div className="flex gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setEditingItem(null)}
-                  className="flex-1 px-5 py-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/70 text-gray-300 transition-all duration-200 font-medium border border-gray-700/50"
-                  disabled={saving}
-                >
-                  Cancelar
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={onSaveEdit}
-                  disabled={saving}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white transition-all duration-200 font-medium shadow-lg shadow-purple-900/30"
-                >
-                  {saving ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Salvando...
-                    </>
-                  ) : (
-                    <>
-                      <Edit3 className="w-5 h-5" />
-                      Salvar Alterações
-                    </>
-                  )}
-                </motion.button>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-        </AnimatePresence>
       )}
 
       {}
