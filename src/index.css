@@ -413,7 +413,8 @@ input[type='number'] {
   box-shadow: 0 24px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
   padding: 1rem;
   isolation: isolate;
-  overflow: hidden;
+  /* Deixe dropdowns ultrapassarem sem serem cortados */
+  overflow: visible;
 }
 
 .app-modal-panel::before {

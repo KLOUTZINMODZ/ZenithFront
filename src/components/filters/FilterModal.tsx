@@ -61,10 +61,22 @@ const translateStatus = (status: string): string => {
   return statusTranslations[normalized] || statusTranslations[status] || status;
 };
 
+const toTitleCase = (value: string) =>
+  value
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+const normalizeGameValue = (value?: string) => {
+  const raw = (value ?? '').trim();
+  if (!raw || raw.toLowerCase() === 'all') return 'all';
+  return toTitleCase(raw);
+};
+
 const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', initial, categories = [], games = [], statuses = [], showGame = true, showCategory = true, showSort = true, showStatus = false, onApply, onClose }) => {
   const hasStatuses = Array.isArray(statuses) && statuses.length > 1 && statuses.some((s) => s !== 'all');
   const [category, setCategory] = useState<string>(initial.category ?? 'all');
-  const [game, setGame] = useState<string>(initial.game ?? 'all');
+  const [game, setGame] = useState<string>(normalizeGameValue(initial.game));
   const [sortBy, setSortBy] = useState<FilterModalValues['sortBy']>(initial.sortBy ?? 'recent');
   const [status, setStatus] = useState<string>(initial.status ?? 'all');
   const [gameOpen, setGameOpen] = useState<boolean>(false);
@@ -76,11 +88,27 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const statusRef = useRef<HTMLDivElement | null>(null);
 
+  const normalizedGames = useMemo(() => {
+    const seen = new Set<string>();
+    const list: string[] = [];
+    games.forEach((g) => {
+      const norm = normalizeGameValue(g);
+      if (!norm) return;
+      const key = norm.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      list.push(norm);
+    });
+    const withoutAll = list.filter((g) => g !== 'all');
+    const sorted = withoutAll.sort((a, b) => a.localeCompare(b, 'pt', { sensitivity: 'base' }));
+    return ['all', ...sorted];
+  }, [games]);
+
   
   useEffect(() => {
     if (!isOpen) return;
     setCategory(initial.category ?? 'all');
-    setGame(initial.game ?? 'all');
+    setGame(normalizeGameValue(initial.game));
     setSortBy(initial.sortBy ?? 'recent');
     setStatus(initial.status ?? 'all');
   }, [isOpen, initial.category, initial.game, initial.sortBy, initial.status]);
@@ -167,7 +195,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
 
   const hasChanges = useMemo(() => (
     (showCategory && category !== (initial.category ?? 'all')) ||
-    (showGame && game !== (initial.game ?? 'all')) ||
+    (showGame && game !== normalizeGameValue(initial.game)) ||
     (showSort && sortBy !== (initial.sortBy ?? 'recent')) ||
     (showStatus && hasStatuses && status !== (initial.status ?? 'all'))
   ), [category, game, sortBy, status, showCategory, showGame, showSort, showStatus, hasStatuses, initial.category, initial.game, initial.sortBy, initial.status]);
@@ -348,7 +376,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
                         className="absolute z-[100] mt-2 w-full rounded-xl border border-purple-500/30 bg-gray-800/98 backdrop-blur-sm shadow-2xl shadow-purple-600/20 overflow-hidden"
                       >
                         <div className="dropdown-panel modal-scrollbar max-h-48 overflow-y-auto py-2">
-                          {games.map((g, idx) => {
+                          {normalizedGames.map((g: string, idx: number) => {
                             const selected = g === game;
                             return (
                               <motion.button
