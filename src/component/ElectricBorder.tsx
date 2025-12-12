@@ -7,6 +7,7 @@ type ElectricBorderProps = PropsWithChildren<{
   thickness?: number;
   className?: string;
   style?: CSSProperties;
+  glow?: boolean;
 }>;
 
 function hexToRgba(hex: string, alpha = 1): string {
@@ -32,7 +33,8 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
   chaos = 1,
   thickness = 2,
   className,
-  style
+  style,
+  glow = true
 }) => {
   const rawId = useId().replace(/[:]/g, '');
   const filterId = `turbulent-displace-${rawId}`;
@@ -119,7 +121,7 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
     borderStyle: 'solid',
     borderColor: hexToRgba(color, 0.6),
     filter: `blur(${0.5 + thickness * 0.25}px)`,
-    opacity: 0.5
+    opacity: 0.35
   };
 
   const glow2Style: CSSProperties = {
@@ -128,16 +130,16 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
     borderStyle: 'solid',
     borderColor: color,
     filter: `blur(${2 + thickness * 0.5}px)`,
-    opacity: 0.5
+    opacity: 0.35
   };
 
   const bgGlowStyle: CSSProperties = {
     ...inheritRadius,
-    transform: 'scale(1.08)',
-    filter: 'blur(32px)',
-    opacity: 0.3,
+    transform: 'scale(1.02)',
+    filter: 'blur(24px)',
+    opacity: 0.22,
     zIndex: -1,
-    background: `linear-gradient(-30deg, ${hexToRgba(color, 0.8)}, transparent, ${color})`
+    background: `linear-gradient(-30deg, ${hexToRgba(color, 0.6)}, transparent, ${color})`
   };
 
   return (
@@ -186,9 +188,13 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
 
       <div className="absolute inset-0 pointer-events-none" style={inheritRadius}>
         <div ref={strokeRef} className="absolute inset-0 box-border" style={strokeStyle} />
-        <div className="absolute inset-0 box-border" style={glow1Style} />
-        <div className="absolute inset-0 box-border" style={glow2Style} />
-        <div className="absolute inset-0" style={bgGlowStyle} />
+        {glow && (
+          <>
+            <div className="absolute inset-0 box-border" style={glow1Style} />
+            <div className="absolute inset-0 box-border" style={glow2Style} />
+            <div className="absolute inset-0" style={bgGlowStyle} />
+          </>
+        )}
       </div>
 
       <div className="relative" style={inheritRadius}>

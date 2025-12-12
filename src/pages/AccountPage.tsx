@@ -270,7 +270,14 @@ const AccountPage: React.FC = () => {
       </Modal>
 
       {/* Hero Profile Section - Design Único */}
-      <ElectricBorder className="block rounded-2xl" thickness={2.5} speed={1} chaos={1} color="#7c3aed">
+      <ElectricBorder
+        className="block rounded-2xl"
+        thickness={2}
+        speed={1}
+        chaos={1}
+        color="#7c3aed"
+        glow={false}
+      >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
