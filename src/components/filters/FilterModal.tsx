@@ -62,7 +62,7 @@ const translateStatus = (status: string): string => {
 };
 
 const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', initial, categories = [], games = [], statuses = [], showGame = true, showCategory = true, showSort = true, showStatus = false, onApply, onClose }) => {
-  const hasStatuses = statuses && statuses.length > 0 && statuses.some(s => s !== 'all');
+  const hasStatuses = Array.isArray(statuses) && statuses.length > 1 && statuses.some((s) => s !== 'all');
   const [category, setCategory] = useState<string>(initial.category ?? 'all');
   const [game, setGame] = useState<string>(initial.game ?? 'all');
   const [sortBy, setSortBy] = useState<FilterModalValues['sortBy']>(initial.sortBy ?? 'recent');
@@ -71,6 +71,8 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
   const gameRef = useRef<HTMLDivElement | null>(null);
   const [categoryOpen, setCategoryOpen] = useState<boolean>(false);
   const categoryRef = useRef<HTMLDivElement | null>(null);
+  const [sortOpen, setSortOpen] = useState<boolean>(false);
+  const sortRef = useRef<HTMLDivElement | null>(null);
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const statusRef = useRef<HTMLDivElement | null>(null);
 
@@ -131,6 +133,19 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
 
   
   useEffect(() => {
+    if (!sortOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (!sortRef.current) return;
+      if (!sortRef.current.contains(e.target as Node)) {
+        setSortOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [sortOpen]);
+
+  
+  useEffect(() => {
     if (!statusOpen) return;
     const onDown = (e: MouseEvent) => {
       if (!statusRef.current) return;
@@ -154,8 +169,8 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
     (showCategory && category !== (initial.category ?? 'all')) ||
     (showGame && game !== (initial.game ?? 'all')) ||
     (showSort && sortBy !== (initial.sortBy ?? 'recent')) ||
-    (showStatus && status !== (initial.status ?? 'all'))
-  ), [category, game, sortBy, status, showCategory, showGame, showSort, showStatus, initial.category, initial.game, initial.sortBy, initial.status]);
+    (showStatus && hasStatuses && status !== (initial.status ?? 'all'))
+  ), [category, game, sortBy, status, showCategory, showGame, showSort, showStatus, hasStatuses, initial.category, initial.game, initial.sortBy, initial.status]);
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
@@ -170,7 +185,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
     if (showCategory) setCategory('all');
     if (showGame) setGame('all');
     if (showSort) setSortBy('recent');
-    if (showStatus) setStatus('all');
+    if (showStatus && hasStatuses) setStatus('all');
   };
 
   const getStatusIcon = (statusValue: string) => {
@@ -317,7 +332,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
                     aria-haspopup="listbox"
                     aria-expanded={gameOpen}
                     onClick={() => setGameOpen((v) => !v)}
-                    className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${gameOpen ? 'ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
+                    className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${gameOpen ? 'open ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
                   >
                     <span className="truncate text-left font-medium">{game === 'all' ? 'Todos os jogos' : game}</span>
                     <ChevronDown className={`w-4 h-4 ml-2 text-purple-400 transition-transform duration-200 ${gameOpen ? 'rotate-180' : ''}`} />
@@ -396,7 +411,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
                     aria-haspopup="listbox"
                     aria-expanded={categoryOpen}
                     onClick={() => setCategoryOpen((v) => !v)}
-                    className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${categoryOpen ? 'ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
+                    className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${categoryOpen ? 'open ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
                   >
                     <span className="truncate text-left font-medium">{category === 'all' ? 'Todas as categorias' : translateCategoryLabel(category)}</span>
                     <ChevronDown className={`w-4 h-4 ml-2 text-purple-400 transition-transform duration-200 ${categoryOpen ? 'rotate-180' : ''}`} />
@@ -469,19 +484,60 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
                       </motion.span>
                     )}
                   </label>
-                  <div className="relative">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as FilterModalValues['sortBy'])}
-                      className="field-select w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border border-gray-700/70 hover:border-purple-500/40 rounded-xl px-4 py-3 sm:py-3.5 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all appearance-none cursor-pointer font-medium"
+                  <div className="relative" ref={sortRef}>
+                    <button
+                      type="button"
+                      aria-haspopup="listbox"
+                      aria-expanded={sortOpen}
+                      onClick={() => setSortOpen((v: boolean) => !v)}
+                      className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${sortOpen ? 'open ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
                     >
-                      {Object.entries(sortLabels).map(([value, label]) => (
-                        <option key={value} value={value}>{label}</option>
-                      ))}
-                    </select>
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                      <ChevronDown className="w-4 h-4 text-purple-400" />
-                    </div>
+                      <span className="truncate text-left font-medium">{sortLabels[(sortBy ?? 'recent') as SortKey]}</span>
+                      <ChevronDown className={`w-4 h-4 ml-2 text-purple-400 transition-transform duration-200 ${sortOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    <AnimatePresence>
+                      {sortOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                          transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute z-[100] mt-2 w-full rounded-xl border border-purple-500/30 bg-gray-800/98 backdrop-blur-sm shadow-2xl shadow-purple-600/20 overflow-hidden"
+                        >
+                          <div className="dropdown-panel modal-scrollbar max-h-48 overflow-y-auto py-2">
+                            {Object.entries(sortLabels).map(([value, label], idx) => {
+                              const selected = value === sortBy;
+                              return (
+                                <motion.button
+                                  key={value}
+                                  type="button"
+                                  role="option"
+                                  aria-selected={selected}
+                                  onClick={() => { setSortBy(value as SortKey); setSortOpen(false); }}
+                                  className={`dropdown-item w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors ${selected ? 'bg-purple-600/20 text-white border-l-2 border-purple-500' : 'text-gray-300 hover:bg-gray-700/60 hover:text-white border-l-2 border-transparent'}`}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ duration: 0.12, delay: idx * 0.02 }}
+                                  whileHover={{ x: 4 }}
+                                  whileTap={{ scale: 0.98 }}
+                                >
+                                  <span className="truncate font-medium">{label}</span>
+                                  {selected && (
+                                    <motion.div
+                                      initial={{ scale: 0 }}
+                                      animate={{ scale: 1 }}
+                                      className="ml-2"
+                                    >
+                                      <Check className="w-4 h-4 text-purple-400" />
+                                    </motion.div>
+                                  )}
+                                </motion.button>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </motion.div>
               )}
@@ -513,7 +569,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, title = 'Filtros', in
                     aria-haspopup="listbox"
                     aria-expanded={statusOpen}
                     onClick={() => setStatusOpen((v) => !v)}
-                    className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${statusOpen ? 'ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
+                    className={`field-trigger w-full bg-gray-800/60 hover:bg-gray-700/80 text-white border rounded-xl px-4 py-3 sm:py-3.5 flex items-center justify-between focus:outline-none focus:ring-2 transition-all ${statusOpen ? 'open ring-2 ring-purple-500/50 border-purple-500/70 bg-gray-700/80' : 'border-gray-700/70 hover:border-purple-500/40'}`}
                   >
                     <span className="truncate text-left font-medium flex items-center gap-2">
                       {status !== 'all' && (() => {
