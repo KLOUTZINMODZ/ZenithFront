@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Eye, Loader2, Package, Filter, Heart } from 'lucide-react';
-import ElectricBorder from '@react-bits/ElectricBorder-TS-TW';
+import ElectricBorder from './ElectricBorder';
 import { useFavorites } from '../contexts/FavoritesContext';
 import FavoritesWidget from './favorites/FavoritesWidget';
 import { useNotifications } from '../contexts/NotificationContext';
