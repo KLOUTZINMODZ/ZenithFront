@@ -29,6 +29,7 @@ import { getReceivedReviews } from '../services/reviewService';
 import { useAchievements } from '../hooks/useAchievements';
 import { useAchievementsSync } from '../hooks/useAchievementsSync';
 import AchievementCard from '../components/AchievementCard';
+import ElectricBorder from '../component/ElectricBorder';
 
 const AccountPage: React.FC = () => {
   const { user, updateUser } = useAuth();
@@ -269,11 +270,11 @@ const AccountPage: React.FC = () => {
       </Modal>
 
       {/* Hero Profile Section - Design Único */}
-      <div className="electric-border rounded-2xl">
+      <ElectricBorder className="block rounded-2xl" thickness={2.5} speed={1} chaos={1} color="#7c3aed">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[22px]"
+          className="relative overflow-hidden rounded-[20px]"
         >
           {/* Background com gradiente animado */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-pink-600/20">
@@ -505,7 +506,7 @@ const AccountPage: React.FC = () => {
           </div>
         </div>
       </motion.div>
-      </div>
+      </ElectricBorder>
 
       {/* Stats Grid - Cards Glassmorphism */}
       <motion.div
