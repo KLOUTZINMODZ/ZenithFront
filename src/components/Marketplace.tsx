@@ -346,7 +346,7 @@ const Marketplace: React.FC = () => {
                       </span>
                     </h1>
                     <p className="mt-2 text-sm sm:text-base text-white/70">
-                      Seu hub para descobrir itens lendários, serviços exclusivos e drops limitados da comunidade gamer.
+                      Seu hub para descobrir itens lendários, serviços exclusivos e drops limitados da comunidade gamer
                     </p>
                   </div>
                 </div>
