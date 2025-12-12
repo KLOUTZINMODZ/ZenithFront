@@ -95,7 +95,6 @@ export default {
         }
       }
       addUtilities(newUtilities)
-    },
-      require("tailwindcss-animate")
+    }
 ],
 };
