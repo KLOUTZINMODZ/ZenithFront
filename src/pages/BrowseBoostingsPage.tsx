@@ -305,7 +305,7 @@ const BrowseBoostingsPage: React.FC = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <Mail className="w-4 h-4" />
-                    <span className="text-sm font-medium">Notificações de Boosting</span>
+                    <span className="text-sm font-medium">Preferência</span>
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
