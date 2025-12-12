@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Eye, Loader2, Package, Filter, Heart } from 'lucide-react';
+import ElectricBorder from '@react-bits/ElectricBorder-TS-TW';
 import { useFavorites } from '../contexts/FavoritesContext';
 import FavoritesWidget from './favorites/FavoritesWidget';
 import { useNotifications } from '../contexts/NotificationContext';
@@ -450,19 +451,20 @@ const Marketplace: React.FC = () => {
                 animate="visible"
               >
                 <AnimatePresence mode="popLayout">
-                  {pagedItems.map((item: any) => (
-                    <motion.div
-                      key={item._id}
-                      layout
-                      variants={cardVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit={{ opacity: 0, scale: 0.8, y: -10 }}
-                      whileHover={{ y: -8, scale: 1.03 }}
-                      transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
-                      className={`group relative bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-700/50 backdrop-blur-sm h-[500px] flex flex-col ${ (String(item.status||'active').toLowerCase() === 'sold' || String(item.status||'active').toLowerCase() === 'reserved' || (typeof item.stockLeft === 'number' && item.stockLeft <= 0)) ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-purple-500/20 hover:shadow-2xl hover:border-purple-500/30 cursor-pointer'}`}
-                      onClick={() => handleItemClick(item)}
-                    >
+                  {pagedItems.map((item: any) => {
+                    const cardBody = (
+                      <motion.div
+                        key={item._id}
+                        layout
+                        variants={cardVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit={{ opacity: 0, scale: 0.8, y: -10 }}
+                        whileHover={{ y: -8, scale: 1.03 }}
+                        transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                        className={`group relative bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-700/50 backdrop-blur-sm h-[500px] flex flex-col ${ (String(item.status||'active').toLowerCase() === 'sold' || String(item.status||'active').toLowerCase() === 'reserved' || (typeof item.stockLeft === 'number' && item.stockLeft <= 0)) ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-purple-500/20 hover:shadow-2xl hover:border-purple-500/30 cursor-pointer'}`}
+                        onClick={() => handleItemClick(item)}
+                      >
                   <div className="relative h-52 bg-gradient-to-br from-gray-700 to-gray-800 overflow-hidden">
                     {}
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent z-10 pointer-events-none" />
@@ -523,19 +525,6 @@ const Marketplace: React.FC = () => {
                       </span>
                     </motion.div>
 
-                    {}
-                    {item.detached && (
-                      <motion.div 
-                        className="absolute bottom-3 left-3 z-20"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2, type: "spring" }}
-                      >
-                        <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500 text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg shadow-yellow-500/50 border border-yellow-300/50 animate-pulse">
-                          <Star className="w-3.5 h-3.5 fill-current" /> Patrocinado
-                        </span>
-                      </motion.div>
-                    )}
                   </div>
 
                 {}
@@ -649,7 +638,21 @@ const Marketplace: React.FC = () => {
                   </div>
                 </motion.div>
               </motion.div>
-            ))}
+                    );
+
+                    return item.detached ? (
+                      <ElectricBorder
+                        key={item._id}
+                        borderWidth={2}
+                        glowColor="#a855f7"
+                        className="rounded-2xl"
+                      >
+                        {cardBody}
+                      </ElectricBorder>
+                    ) : (
+                      cardBody
+                    );
+                  })}
             </AnimatePresence>
               </motion.div>
             </motion.div>
