@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { boostingService } from '../services';
 import { useAuth } from '../contexts/AuthContext';
-import { Plus, Eye, Loader2, Package, Filter, Heart, Target, Gamepad2, Clock, AlertCircle, CheckCircle, Pause, MessageSquare } from 'lucide-react';
+import { Plus, Eye, Loader2, Package, Filter, Heart, Target, Gamepad2, Clock, AlertCircle, CheckCircle, Pause, MessageSquare, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FilterModal, { type FilterModalValues } from '../components/filters/FilterModal';
 import ImagePlaceholder from '../components/ImagePlaceholder';
@@ -299,7 +299,7 @@ const BrowseBoostingsPage: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <motion.button
-                    onClick={() => navigate('/notification-preferences')}
+                    onClick={() => navigate('/notifications/preferences')}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur transition-all duration-200"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
