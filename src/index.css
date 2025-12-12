@@ -535,6 +535,43 @@ input[type='number'] {
   filter: grayscale(0.15);
 }
 
+/* Electric border (inspirado em shadcn electric-border) */
+.electric-border {
+  position: relative;
+  padding: 2px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from 0deg,
+    #8b5cf6,
+    #2563eb,
+    #ec4899,
+    #8b5cf6
+  );
+  overflow: hidden;
+}
+.electric-border::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 90deg,
+    rgba(139,92,246,0.6),
+    rgba(59,130,246,0.35),
+    rgba(236,72,153,0.35),
+    rgba(139,92,246,0.6)
+  );
+  animation: electric-spin 6s linear infinite;
+  filter: blur(18px);
+}
+.electric-border > * {
+  position: relative;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(17,24,39,0.92), rgba(17,24,39,0.9));
+}
+@keyframes electric-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Custom animations */
 @keyframes fade-in {
   from {

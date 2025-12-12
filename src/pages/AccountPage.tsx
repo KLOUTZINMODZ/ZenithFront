@@ -269,28 +269,29 @@ const AccountPage: React.FC = () => {
       </Modal>
 
       {/* Hero Profile Section - Design Único */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl"
-      >
-        {/* Background com gradiente animado */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-pink-600/20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.3),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.3),transparent_50%)]" />
-        </div>
-        
-        {/* Padrão de pontos decorativo */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-2 h-2 bg-white rounded-full" />
-          <div className="absolute top-20 right-20 w-3 h-3 bg-purple-400 rounded-full" />
-          <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-blue-400 rounded-full" />
-          <div className="absolute bottom-20 right-1/4 w-4 h-4 bg-pink-400 rounded-full" />
-        </div>
+      <div className="electric-border rounded-2xl">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative overflow-hidden rounded-[22px]"
+        >
+          {/* Background com gradiente animado */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-pink-600/20">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.3),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.3),transparent_50%)]" />
+          </div>
+          
+          {/* Padrão de pontos decorativo */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 left-10 w-2 h-2 bg-white rounded-full" />
+            <div className="absolute top-20 right-20 w-3 h-3 bg-purple-400 rounded-full" />
+            <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-blue-400 rounded-full" />
+            <div className="absolute bottom-20 right-1/4 w-4 h-4 bg-pink-400 rounded-full" />
+          </div>
 
-        {/* Conteúdo */}
-        <div className="relative backdrop-blur-xl bg-gray-900/40 border border-gray-700/50 p-6 sm:p-8 lg:p-10">
-          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-8">
+          {/* Conteúdo */}
+          <div className="relative backdrop-blur-xl bg-gray-900/45 border border-gray-800/60 rounded-[18px] p-6 sm:p-8 lg:p-10 shadow-[0_10px_60px_rgba(0,0,0,0.45)]">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-8">
             {/* Avatar com efeito glassmorphism */}
             <motion.div 
               initial={{ scale: 0.8, opacity: 0 }}
@@ -504,6 +505,7 @@ const AccountPage: React.FC = () => {
           </div>
         </div>
       </motion.div>
+      </div>
 
       {/* Stats Grid - Cards Glassmorphism */}
       <motion.div
