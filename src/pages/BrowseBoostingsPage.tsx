@@ -299,13 +299,13 @@ const BrowseBoostingsPage: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <motion.button
-                    onClick={() => navigate('/post-boosting')}
+                    onClick={() => navigate('/notification-preferences')}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur transition-all duration-200"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Plus className="w-4 h-4" />
-                    <span className="text-sm font-medium">Postar Boosting</span>
+                    <Mail className="w-4 h-4" />
+                    <span className="text-sm font-medium">Notificações de Boosting</span>
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
