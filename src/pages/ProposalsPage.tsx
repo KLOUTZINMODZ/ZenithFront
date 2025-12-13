@@ -1261,37 +1261,32 @@ const ProposalsPage: React.FC = () => {
                         </button>
                       )}
                     </div>
-                    <div className="p-4 flex-1 flex flex-col">
-                      <div className={`relative rounded-xl flex-1 min-h-64 ${accountImageUrl ? 'overflow-hidden border border-gray-800/80' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}>
+                    <div className="p-4 flex-1 flex flex-col gap-3">
+                      <div className={`relative rounded-xl flex-1 min-h-[280px] ${accountImageUrl ? 'overflow-hidden border border-gray-800/80' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}>
                         {accountImageUrl ? (
-                          <>
-                            <div
-                              className="relative h-full bg-gray-800 rounded-xl overflow-hidden cursor-pointer group"
-                              onClick={() => openImageViewer(accountImageUrl)}
-                            >
-                              <img
-                                src={accountImageUrl}
-                                alt="Imagem da conta do cliente"
-                                loading="lazy"
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                onError={(e) => {
-                                  const target = e.currentTarget;
-                                  target.style.display = 'none';
-                                  const placeholder = target.nextElementSibling as HTMLElement;
-                                  if (placeholder) placeholder.style.display = 'flex';
-                                }}
-                              />
-                              <ImagePlaceholder className="absolute inset-0" style={{ display: 'none' }} />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
-                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 backdrop-blur-sm rounded-full p-2">
-                                  <ZoomIn className="w-5 h-5 text-white" />
-                                </div>
+                          <div
+                            className="relative h-full bg-gray-800 rounded-xl overflow-hidden cursor-pointer group"
+                            onClick={() => openImageViewer(accountImageUrl)}
+                          >
+                            <img
+                              src={accountImageUrl}
+                              alt="Imagem da conta do cliente"
+                              loading="lazy"
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                target.style.display = 'none';
+                                const placeholder = target.nextElementSibling as HTMLElement;
+                                if (placeholder) placeholder.style.display = 'flex';
+                              }}
+                            />
+                            <ImagePlaceholder className="absolute inset-0" style={{ display: 'none' }} />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+                              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 backdrop-blur-sm rounded-full p-2">
+                                <ZoomIn className="w-5 h-5 text-white" />
                               </div>
                             </div>
-                            <p className="text-xs text-gray-500 mt-3 text-center shrink-0">
-                              Clique para ampliar e analisar a conta enviada pelo cliente
-                            </p>
-                          </>
+                          </div>
                         ) : (
                           <div className="text-center space-y-2 px-6">
                             <ImagePlaceholder className="mx-auto w-12 h-12" />
@@ -1300,6 +1295,11 @@ const ProposalsPage: React.FC = () => {
                           </div>
                         )}
                       </div>
+                      {accountImageUrl && (
+                        <p className="text-xs text-gray-500 text-center">
+                          Clique para ampliar e analisar a conta enviada pelo cliente
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
