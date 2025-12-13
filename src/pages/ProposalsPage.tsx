@@ -234,6 +234,11 @@ const ProposalsPage: React.FC = () => {
   const memberSinceText = useMemo(() => formatMemberSince(boostingRequest?.client?.joinDate), [boostingRequest?.client?.joinDate]);
   const memberDurationText = useMemo(() => formatMemberDuration(boostingRequest?.client?.joinDate), [boostingRequest?.client?.joinDate]);
   const clientAchievements = boostingRequest?.client?.achievementsCount ?? boostingRequest?.client?.statistics?.totalTransactions ?? 0;
+  const openClientProfile = useCallback(() => {
+    if (clientProfileUrl) {
+      window.open(clientProfileUrl, '_blank', 'noopener,noreferrer');
+    }
+  }, [clientProfileUrl]);
   const quickStats = useMemo<QuickStat[]>(() => {
     if (!boostingRequest) return [];
     const stats: QuickStat[] = [];
@@ -1097,7 +1102,13 @@ const ProposalsPage: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="bg-gray-800/60 rounded-2xl p-6 mb-6 border border-gray-700/80 shadow-2xl shadow-black/20"
             >
-              <div className="flex items-center gap-4 mb-6">
+              <button
+                type="button"
+                onClick={openClientProfile}
+                disabled={!clientProfileUrl}
+                className={`flex items-center gap-4 mb-6 text-left ${clientProfileUrl ? 'hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500' : ''}`}
+                aria-label={clientProfileUrl ? `Ver perfil de ${boostingRequest.client.name}` : undefined}
+              >
                 <div className="w-14 h-14 rounded-full bg-gradient-to-r from-purple-400 to-blue-400 flex items-center justify-center overflow-hidden shadow-lg shadow-purple-500/20">
                   {boostingRequest.client.avatar ? (
                     <img
@@ -1126,7 +1137,7 @@ const ProposalsPage: React.FC = () => {
                   <h3 className="font-semibold text-white text-2xl leading-tight">{boostingRequest.client.name}</h3>
                   <p className="text-sm text-gray-500">Publicado com prioridade para boosters confiáveis</p>
                 </div>
-              </div>
+              </button>
 
               <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,0.9fr)] items-start">
                 <div className="space-y-6">
@@ -1229,50 +1240,6 @@ const ProposalsPage: React.FC = () => {
                             </button>
                           )}
                         </div>
-                      )}
-                      {boostingRequest.client && (
-                        <button
-                          type="button"
-                          onClick={() => clientProfileUrl && window.open(clientProfileUrl, '_blank', 'noopener,noreferrer')}
-                          className="bg-gray-900/40 border border-gray-800 rounded-xl p-4 flex flex-col gap-3 sm:col-span-2 text-left transition-colors hover:border-purple-500/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
-                          aria-label={`Ver perfil de ${boostingRequest.client.name}`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-xs uppercase tracking-wide text-gray-500">Cliente</p>
-                              <div className="flex items-center gap-2 text-white font-semibold">
-                                {boostingRequest.client.name}
-                                {boostingRequest.client.isVerified && (
-                                  <CheckCircle className="w-4 h-4 text-blue-400" title="Usuário verificado" />
-                                )}
-                              </div>
-                            </div>
-                            {clientProfileUrl && (
-                              <span className="text-xs px-3 py-1 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-200 hover:bg-purple-600/30 transition-colors">
-                                Ver perfil
-                              </span>
-                            )}
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 text-sm text-gray-300">
-                            {memberSinceText && (
-                              <div>
-                                <p className="text-[11px] uppercase tracking-wide text-gray-500">Na plataforma</p>
-                                <p>{memberSinceText}</p>
-                                {memberDurationText && <p className="text-xs text-gray-500">({memberDurationText})</p>}
-                              </div>
-                            )}
-                            <div>
-                              <p className="text-[11px] uppercase tracking-wide text-gray-500">Conquistas</p>
-                              <p className="text-white font-semibold">{clientAchievements}</p>
-                            </div>
-                            {boostingRequest.client.statistics?.totalTransactions !== undefined && (
-                              <div>
-                                <p className="text-[11px] uppercase tracking-wide text-gray-500">Transações</p>
-                                <p className="text-white font-semibold">{boostingRequest.client.statistics.totalTransactions}</p>
-                              </div>
-                            )}
-                          </div>
-                        </button>
                       )}
                     </div>
                   )}
