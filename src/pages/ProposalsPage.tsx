@@ -1265,27 +1265,26 @@ const ProposalsPage: React.FC = () => {
                       <div className={`relative rounded-xl flex-1 min-h-[340px] ${accountImageUrl ? 'border border-gray-800/80' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}>
                         {accountImageUrl ? (
                           <div
-                            className="relative h-full w-full bg-gray-800 rounded-xl overflow-hidden cursor-pointer group"
+                            className="relative h-full w-full min-h-[340px] bg-gray-800 rounded-xl overflow-hidden cursor-pointer group flex items-center justify-center"
+                            style={{ backgroundImage: `url(${accountImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                             onClick={() => openImageViewer(accountImageUrl)}
                           >
                             <img
                               src={accountImageUrl}
                               alt="Imagem da conta do cliente"
                               loading="lazy"
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-0"
                               onLoad={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                                const placeholder = (e.currentTarget.nextElementSibling as HTMLElement) || null;
-                                if (placeholder) placeholder.style.display = 'none';
+                                // se carregar, mantemos background e liberamos hover
+                                const img = e.currentTarget;
+                                img.style.opacity = '0.01'; // mantém hover, mas invisível
                               }}
                               onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                                const target = e.currentTarget;
-                                target.style.display = 'none';
-                                const placeholder = target.nextElementSibling as HTMLElement;
-                                if (placeholder) placeholder.style.display = 'flex';
+                                const img = e.currentTarget;
+                                img.style.display = 'none';
                               }}
                             />
-                            <ImagePlaceholder className="absolute inset-0 flex items-center justify-center pointer-events-none" />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+                            <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
                               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 backdrop-blur-sm rounded-full p-2">
                                 <ZoomIn className="w-5 h-5 text-white" />
                               </div>
