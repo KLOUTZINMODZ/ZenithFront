@@ -1182,25 +1182,6 @@ const ProposalsPage: React.FC = () => {
                     </div>
                   )}
 
-                  {quickStats.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-                      {quickStats.map((stat) => (
-                        <div
-                          key={`stat-${stat.label}`}
-                          className="bg-gray-900/30 border border-gray-800 rounded-2xl p-3 flex items-center gap-3 shadow-inner"
-                        >
-                          <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${stat.iconClass}`}>
-                            <stat.icon className="w-5 h-5" />
-                          </div>
-                          <div>
-                            <p className="text-[11px] uppercase tracking-wide text-gray-500">{stat.label}</p>
-                            <p className={`text-sm font-semibold ${stat.accentClass}`}>{stat.value}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
                   {(boostingRequest.additionalInfo || boostingRequest.description || boostingRequest.client) && (
                     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                       {boostingRequest.additionalInfo && (
