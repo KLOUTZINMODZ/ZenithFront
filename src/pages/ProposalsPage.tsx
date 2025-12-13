@@ -1284,7 +1284,7 @@ const ProposalsPage: React.FC = () => {
                                 if (placeholder) placeholder.style.display = 'flex';
                               }}
                             />
-                            <ImagePlaceholder className="absolute inset-0 flex items-center justify-center" style={{ display: 'flex' }} />
+                            <ImagePlaceholder className="absolute inset-0 flex items-center justify-center pointer-events-none" />
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
                               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 backdrop-blur-sm rounded-full p-2">
                                 <ZoomIn className="w-5 h-5 text-white" />
