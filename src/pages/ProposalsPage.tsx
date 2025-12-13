@@ -238,6 +238,48 @@ const ProposalsPage: React.FC = () => {
     if (!boostingRequest) return [];
     const stats: QuickStat[] = [];
 
+    stats.push({
+      label: 'Status',
+      value: boostingRequest.isActive ? 'Ativo' : 'Encerrado',
+      icon: CheckCircle,
+      iconClass: boostingRequest.isActive ? 'bg-green-500/10 text-green-300' : 'bg-yellow-500/10 text-yellow-200',
+      accentClass: boostingRequest.isActive ? 'text-green-200' : 'text-yellow-100'
+    });
+
+    stats.push({
+      label: 'Propostas',
+      value: `${proposals?.length || 0}`,
+      icon: MessageSquare,
+      iconClass: 'bg-blue-500/10 text-blue-200',
+      accentClass: 'text-blue-100'
+    });
+
+    stats.push({
+      label: 'Preço mínimo',
+      value: formatPrice(boostingRequest.minPrice),
+      icon: DollarSign,
+      iconClass: 'bg-purple-500/10 text-purple-200',
+      accentClass: 'text-purple-100'
+    });
+
+    stats.push({
+      label: 'Proposta aceita',
+      value: boostingRequest.acceptedProposal ? formatPrice(boostingRequest.acceptedProposal.proposedPrice) : '—',
+      icon: DollarSign,
+      iconClass: 'bg-green-500/10 text-green-200',
+      accentClass: boostingRequest.acceptedProposal ? 'text-green-200' : 'text-gray-200'
+    });
+
+    stats.push({
+      label: 'Expira em',
+      value: boostingRequest.expirationDate
+        ? new Date(boostingRequest.expirationDate).toLocaleDateString('pt-BR')
+        : '—',
+      icon: Clock,
+      iconClass: 'bg-orange-500/10 text-orange-200',
+      accentClass: 'text-orange-100'
+    });
+
     if (boostingRequest.tags?.length) {
       stats.push({
         label: 'Tags',
@@ -249,7 +291,7 @@ const ProposalsPage: React.FC = () => {
     }
 
     return stats;
-  }, [boostingRequest]);
+  }, [boostingRequest, proposals?.length]);
 
   const baseInfoItems = useMemo<DetailItem[]>(() => {
     if (!boostingRequest) return [];
@@ -1245,35 +1287,6 @@ const ProposalsPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-4 lg:sticky lg:top-6">
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 shadow-lg space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase tracking-wide text-gray-500">Status</span>
-                      <span className={`text-sm font-semibold ${boostingRequest.isActive ? 'text-green-400' : 'text-yellow-300'}`}>
-                        {boostingRequest.isActive ? 'Ativo' : 'Encerrado'}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm text-gray-300">
-                      <span>Propostas</span>
-                      <span className="font-semibold text-white">{proposals?.length || 0}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm text-gray-300">
-                      <span>Preço mínimo</span>
-                      <span className="font-semibold text-white">{formatPrice(boostingRequest.minPrice)}</span>
-                    </div>
-                    {boostingRequest.acceptedProposal && (
-                      <div className="flex items-center justify-between text-sm text-gray-300">
-                        <span>Proposta aceita</span>
-                        <span className="font-semibold text-green-400">{formatPrice(boostingRequest.acceptedProposal.proposedPrice)}</span>
-                      </div>
-                    )}
-                    {boostingRequest.expirationDate && (
-                      <div className="flex items-center justify-between text-sm text-gray-300">
-                        <span>Expira em</span>
-                        <span className="font-semibold text-white">{new Date(boostingRequest.expirationDate).toLocaleDateString('pt-BR')}</span>
-                      </div>
-                    )}
-                  </div>
-
                   <div className="bg-gray-900/60 rounded-2xl border border-gray-800/80 overflow-hidden shadow-lg">
                     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                       <div className="flex items-center gap-2 text-gray-300 text-sm font-medium">

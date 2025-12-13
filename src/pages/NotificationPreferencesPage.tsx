@@ -23,30 +23,16 @@ const NotificationPreferencesPage: React.FC = () => {
   const { user } = useAuth();
   const { addNotification } = useNotifications();
   
-  const [preferences, setPreferences] = useState<NotificationPreferences>({
-    preferences: {
-      newProposal: true,
-      proposalAccepted: true,
-      newBoosting: false,
-      boostingCompleted: true
-    },
-    watchedGames: [],
-    watchedGameIds: [],
-    emailNotifications: true
-  });
-  
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [gameSearch, setGameSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [selectedGameIds, setSelectedGameIds] = useState<number[]>([]);
-  const prefersReducedMotion = useReducedMotion();
+  const GAME_NAME_ALIASES: Record<string, string> = {
+    'Free Fire': 'Garena Free Fire',
+    'Wild Rift': 'League of Legends: Wild Rift',
+    'League of Legends: Wild Rift': 'League of Legends: Wild Rift',
+    'FIFA': 'EA Sports FC',
+    'Grand Theft Auto V': 'Grand Theft Auto 5',
+    'Diablo IV': 'Diablo 4'
+  };
 
-
-  const MAX_SELECTED_GAMES = 4;
-
-
-  const popularGames = [
+  const LEGACY_POPULAR_GAMES = [
     { id: 1, name: 'Albion Online', category: 'MMORPG' },
     { id: 2, name: 'Valorant', category: 'FPS' },
     { id: 3, name: 'League of Legends', category: 'MOBA' },
@@ -74,6 +60,113 @@ const NotificationPreferencesPage: React.FC = () => {
     { id: 25, name: 'Path of Exile', category: 'ARPG' }
   ];
 
+  const POST_BOOSTING_GAMES = [
+    'Albion Online', 'Apex Legends', 'Black Desert Online', 'Call of Duty',
+    'Call of Duty Mobile', 'Clash of Clans', 'Clash Royale', 'Counter-Strike 2',
+    'Diablo 4', 'Diablo Immortal', 'Dota 2', 'EA Sports FC', 'eFootball',
+    'Elden Ring', 'Escape from Tarkov', 'Fallout 76', 'Final Fantasy XIV',
+    'Fortnite', 'Garena Free Fire', 'Genshin Impact', 'Grand Theft Auto 5',
+    'Honkai Impact 3rd', 'Honkai: Star Rail', 'League of Legends',
+    'League of Legends: Wild Rift', 'Lost Ark', 'Minecraft', 'Mobile Legends',
+    'Monster Hunter Now', 'New World', 'Old School RuneScape', 'Overwatch 2',
+    'Path of Exile', 'PUBG', 'PUBG Mobile', 'Rainbow Six Siege',
+    'Raid: Shadow Legends', 'Roblox', 'Rocket League', 'Rust', 'Sea of Thieves',
+    'The Finals', 'Tower of Fantasy', 'Valorant', 'Warframe', 'World of Warcraft',
+    'WoW Classic', 'Wuthering Waves', 'Yu-Gi-Oh! Master Duel', 'Zenless Zone Zero'
+  ];
+
+  const LEGACY_EXTRA_GAMES = ['Teamfight Tactics', 'Legends of Runeterra', 'Hearthstone'];
+
+  const CATEGORY_BY_NAME: Record<string, string> = {
+    'Albion Online': 'MMORPG',
+    'Apex Legends': 'Battle Royale',
+    'Black Desert Online': 'MMORPG',
+    'Call of Duty': 'FPS',
+    'Call of Duty Mobile': 'FPS',
+    'Clash of Clans': 'Strategy',
+    'Clash Royale': 'Strategy',
+    'Counter-Strike 2': 'FPS',
+    'Diablo 4': 'ARPG',
+    'Diablo Immortal': 'Mobile ARPG',
+    'Dota 2': 'MOBA',
+    'EA Sports FC': 'Sports',
+    'eFootball': 'Sports',
+    'Elden Ring': 'Action RPG',
+    'Escape from Tarkov': 'Shooter',
+    'Fallout 76': 'MMORPG',
+    'Final Fantasy XIV': 'MMORPG',
+    'Fortnite': 'Battle Royale',
+    'Garena Free Fire': 'Mobile Battle Royale',
+    'Genshin Impact': 'Action RPG',
+    'Grand Theft Auto 5': 'Action',
+    'Honkai Impact 3rd': 'Action RPG',
+    'Honkai: Star Rail': 'RPG',
+    'League of Legends': 'MOBA',
+    'League of Legends: Wild Rift': 'Mobile MOBA',
+    'Lost Ark': 'MMORPG',
+    'Minecraft': 'Sandbox',
+    'Mobile Legends': 'MOBA',
+    'Monster Hunter Now': 'Action',
+    'New World': 'MMORPG',
+    'Old School RuneScape': 'MMORPG',
+    'Overwatch 2': 'FPS',
+    'Path of Exile': 'ARPG',
+    'PUBG': 'Battle Royale',
+    'PUBG Mobile': 'Mobile Battle Royale',
+    'Rainbow Six Siege': 'FPS',
+    'Raid: Shadow Legends': 'RPG',
+    'Roblox': 'Platform',
+    'Rocket League': 'Sports',
+    'Rust': 'Survival',
+    'Sea of Thieves': 'Adventure',
+    'The Finals': 'FPS',
+    'Tower of Fantasy': 'MMORPG',
+    'Valorant': 'FPS',
+    'Warframe': 'Action',
+    'World of Warcraft': 'MMORPG',
+    'WoW Classic': 'MMORPG',
+    'Wuthering Waves': 'Action RPG',
+    'Yu-Gi-Oh! Master Duel': 'Card Game',
+    'Zenless Zone Zero': 'Action RPG',
+    'Teamfight Tactics': 'Auto Battler',
+    'Legends of Runeterra': 'Card Game',
+    'Hearthstone': 'Card Game'
+  };
+
+  const normalizeGameName = (name: string): string => {
+    return GAME_NAME_ALIASES[name] || name;
+  };
+
+  const POPULAR_GAMES = useMemo(() => {
+    const allNames = [...POST_BOOSTING_GAMES, ...LEGACY_EXTRA_GAMES];
+    return allNames.map((name, index) => ({
+      id: index + 1,
+      name,
+      category: CATEGORY_BY_NAME[name] || 'Diversos'
+    }));
+  }, []);
+
+  const [preferences, setPreferences] = useState<NotificationPreferences>({
+    preferences: {
+      newProposal: true,
+      proposalAccepted: true,
+      newBoosting: false,
+      boostingCompleted: true
+    },
+    watchedGames: [],
+    watchedGameIds: [],
+    emailNotifications: true
+  });
+  
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [gameSearch, setGameSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [selectedGameIds, setSelectedGameIds] = useState<number[]>([]);
+  const prefersReducedMotion = useReducedMotion();
+
+
+  const MAX_SELECTED_GAMES = 4;
 
   const fetchPreferences = async () => {
     if (!user) return;
@@ -84,23 +177,35 @@ const NotificationPreferencesPage: React.FC = () => {
       if (response.success && response.data) {
         setPreferences(response.data);
         
-        // CRITICAL: Salvar preferências no localStorage para que o WebSocket use
         try {
           localStorage.setItem('notification_preferences', JSON.stringify(response.data));
         } catch (e) {
-          // Silenciar erro
+        
         }
 
         if (response.data.watchedGameIds) {
-
           const numericIds = response.data.watchedGameIds.map((id: any) => 
             typeof id === 'string' ? parseInt(id, 10) : id
           ).filter((id: number) => !isNaN(id));
-          setSelectedGameIds(numericIds);
-        } else if (response.data.watchedGames) {
 
+          const normalizedIds = numericIds
+            .map((id: number) => {
+              const legacyMatch = LEGACY_POPULAR_GAMES.find(g => g.id === id);
+              if (legacyMatch) {
+                const normalizedName = normalizeGameName(legacyMatch.name);
+                const newGame = POPULAR_GAMES.find(g => g.name === normalizedName);
+                return newGame?.id ?? null;
+              }
+              const directMatch = POPULAR_GAMES.find(g => g.id === id);
+              return directMatch ? id : null;
+            })
+            .filter((id): id is number => id !== null);
+
+          setSelectedGameIds(normalizedIds);
+        } else if (response.data.watchedGames) {
           const gameIds = response.data.watchedGames.map((name: string) => {
-            const game = popularGames.find(g => g.name === name);
+            const normalizedName = normalizeGameName(name);
+            const game = POPULAR_GAMES.find(g => g.name === normalizedName);
             return game?.id;
           }).filter((id: number | undefined): id is number => id !== undefined);
           setSelectedGameIds(gameIds);
@@ -183,7 +288,7 @@ const NotificationPreferencesPage: React.FC = () => {
 
 
   const filteredGames = useMemo(() => {
-    return popularGames.filter(game => 
+    return POPULAR_GAMES.filter(game => 
       game.name.toLowerCase().includes(debouncedSearch.toLowerCase())
     );
   }, [debouncedSearch]);
@@ -363,7 +468,7 @@ const NotificationPreferencesPage: React.FC = () => {
                   <h3 className="text-sm font-medium text-gray-300 mb-3">Jogos Selecionados:</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {selectedGameIds.map((gameId, index) => {
-                      const game = popularGames.find(g => g.id === gameId);
+                      const game = POPULAR_GAMES.find(g => g.id === gameId);
                       return (
                         <motion.div
                           key={gameId}
@@ -423,7 +528,7 @@ const NotificationPreferencesPage: React.FC = () => {
                 )}
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto">
-                  {filteredGames.slice(0, 50).map((game) => {
+                  {filteredGames.slice(0, 100).map((game) => {
                     const isSelected = selectedGameIds.includes(game.id);
                     const canSelect = !isSelected && selectedGameIds.length < MAX_SELECTED_GAMES;
                     
