@@ -1262,21 +1262,22 @@ const ProposalsPage: React.FC = () => {
                       )}
                     </div>
                     <div className="p-4 pb-3 flex-1 flex flex-col gap-2 justify-between">
-                      <div className={`relative rounded-xl flex-1 min-h-[340px] ${accountImageUrl ? 'border border-gray-800/80' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}>
+                      <div
+                        className={`relative rounded-xl w-full ${accountImageUrl ? 'border border-gray-800/80 bg-gray-800' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}
+                      >
                         {accountImageUrl ? (
                           <div
-                            className="relative h-full w-full bg-gray-800 rounded-xl overflow-hidden cursor-pointer group"
+                            className="relative w-full h-full min-h-[340px] overflow-hidden rounded-lg cursor-pointer group"
                             onClick={() => openImageViewer(accountImageUrl)}
                           >
                             <img
                               src={accountImageUrl}
                               alt="Imagem da conta do cliente"
                               loading="lazy"
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               onLoad={(e: React.SyntheticEvent<HTMLImageElement>) => {
                                 const placeholder = (e.currentTarget.nextElementSibling as HTMLElement) || null;
                                 if (placeholder) placeholder.style.display = 'none';
-                                e.currentTarget.style.display = 'block';
                               }}
                               onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                                 const target = e.currentTarget;
@@ -1285,7 +1286,10 @@ const ProposalsPage: React.FC = () => {
                                 if (placeholder) placeholder.style.display = 'flex';
                               }}
                             />
-                            <ImagePlaceholder className="absolute inset-0 flex items-center justify-center" />
+                            <ImagePlaceholder
+                              className="absolute inset-0 flex items-center justify-center"
+                              style={{ display: 'none' }}
+                            />
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
                               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 backdrop-blur-sm rounded-full p-2">
                                 <ZoomIn className="w-5 h-5 text-white" />
@@ -1300,11 +1304,6 @@ const ProposalsPage: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      {accountImageUrl && (
-                        <p className="text-xs text-gray-500 text-center">
-                          Clique para ampliar e analisar a conta enviada pelo cliente
-                        </p>
-                      )}
                     </div>
                   </div>
                 </div>
