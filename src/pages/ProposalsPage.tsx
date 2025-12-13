@@ -263,14 +263,6 @@ const ProposalsPage: React.FC = () => {
     });
 
     stats.push({
-      label: 'Proposta aceita',
-      value: boostingRequest.acceptedProposal ? formatPrice(boostingRequest.acceptedProposal.proposedPrice) : '—',
-      icon: DollarSign,
-      iconClass: 'bg-green-500/10 text-green-200',
-      accentClass: boostingRequest.acceptedProposal ? 'text-green-200' : 'text-gray-200'
-    });
-
-    stats.push({
       label: 'Expira em',
       value: boostingRequest.expirationDate
         ? new Date(boostingRequest.expirationDate).toLocaleDateString('pt-BR')
@@ -1239,7 +1231,12 @@ const ProposalsPage: React.FC = () => {
                         </div>
                       )}
                       {boostingRequest.client && (
-                        <div className="bg-gray-900/40 border border-gray-800 rounded-xl p-4 flex flex-col gap-3 sm:col-span-2">
+                        <button
+                          type="button"
+                          onClick={() => clientProfileUrl && window.open(clientProfileUrl, '_blank', 'noopener,noreferrer')}
+                          className="bg-gray-900/40 border border-gray-800 rounded-xl p-4 flex flex-col gap-3 sm:col-span-2 text-left transition-colors hover:border-purple-500/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+                          aria-label={`Ver perfil de ${boostingRequest.client.name}`}
+                        >
                           <div className="flex items-center justify-between">
                             <div>
                               <p className="text-xs uppercase tracking-wide text-gray-500">Cliente</p>
@@ -1251,14 +1248,9 @@ const ProposalsPage: React.FC = () => {
                               </div>
                             </div>
                             {clientProfileUrl && (
-                              <a
-                                href={clientProfileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs px-3 py-1 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-200 hover:bg-purple-600/30 transition-colors"
-                              >
+                              <span className="text-xs px-3 py-1 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-200 hover:bg-purple-600/30 transition-colors">
                                 Ver perfil
-                              </a>
+                              </span>
                             )}
                           </div>
                           <div className="grid grid-cols-2 gap-2 text-sm text-gray-300">
@@ -1280,7 +1272,7 @@ const ProposalsPage: React.FC = () => {
                               </div>
                             )}
                           </div>
-                        </div>
+                        </button>
                       )}
                     </div>
                   )}
