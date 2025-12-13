@@ -1246,7 +1246,7 @@ const ProposalsPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-4 lg:sticky lg:top-6">
-                  <div className="bg-gray-900/60 rounded-2xl border border-gray-800/80 overflow-hidden shadow-lg">
+                  <div className="bg-gray-900/60 rounded-2xl border border-gray-800/80 overflow-hidden shadow-lg flex flex-col h-full">
                     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                       <div className="flex items-center gap-2 text-gray-300 text-sm font-medium">
                         <Image className="w-4 h-4" />
@@ -1261,19 +1261,19 @@ const ProposalsPage: React.FC = () => {
                         </button>
                       )}
                     </div>
-                    <div className="p-4">
-                      <div className={`relative rounded-xl ${accountImageUrl ? 'overflow-hidden border border-gray-800/80' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}>
+                    <div className="p-4 flex-1 flex flex-col">
+                      <div className={`relative rounded-xl flex-1 min-h-64 ${accountImageUrl ? 'overflow-hidden border border-gray-800/80' : 'border-2 border-dashed border-gray-700/70 flex items-center justify-center h-48'}`}>
                         {accountImageUrl ? (
                           <>
                             <div
-                              className="aspect-[4/3] bg-gray-800 rounded-xl overflow-hidden cursor-pointer group"
+                              className="relative h-full bg-gray-800 rounded-xl overflow-hidden cursor-pointer group"
                               onClick={() => openImageViewer(accountImageUrl)}
                             >
                               <img
                                 src={accountImageUrl}
                                 alt="Imagem da conta do cliente"
                                 loading="lazy"
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {
                                   const target = e.currentTarget;
                                   target.style.display = 'none';
@@ -1288,7 +1288,7 @@ const ProposalsPage: React.FC = () => {
                                 </div>
                               </div>
                             </div>
-                            <p className="text-xs text-gray-500 mt-2 text-center">
+                            <p className="text-xs text-gray-500 mt-3 text-center shrink-0">
                               Clique para ampliar e analisar a conta enviada pelo cliente
                             </p>
                           </>
